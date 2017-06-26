@@ -245,6 +245,12 @@ app.config( [ '$httpProvider', '$stateProvider', '$urlRouterProvider', '$ionicCo
                 templateUrl: 'view/GoodsReceipt/detail.html',
                 controller: 'GrDetailCtrl'
             } )
+            .state('jobListingConfirm', {
+              url: '/gr/confirm/:TrxNo',
+              cache: 'false',
+              templateUrl: 'view/GoodsReceipt/confirm.html',
+              controller: 'JoblistingConfirmCtrl'
+          })
             .state( 'vginList', {
                 url: '/vgin/list',
                 templateUrl: 'view/VerifyGIN/list.html',
@@ -267,12 +273,12 @@ app.config( [ '$httpProvider', '$stateProvider', '$urlRouterProvider', '$ionicCo
                 templateUrl: 'view/Picking/detail.html',
                 controller: 'PickingDetailCtrl'
             } )
-            .state( 'CartonDetail', {
-                url: '/picking/Carton/:LineItemNo/:CustomerCode/:TrxNo/:GoodsIssueNoteNo',
-                cache: 'false',
-                templateUrl: 'view/Picking/CartonDetail.html',
-                controller: 'CartonDetailCtrl'
-            } )
+            // .state( 'CartonDetail', {
+            //     url: '/picking/Carton/:LineItemNo/:CustomerCode/:TrxNo/:GoodsIssueNoteNo',
+            //     cache: 'false',
+            //     templateUrl: 'view/Picking/CartonDetail.html',
+            //     controller: 'CartonDetailCtrl'
+            // } )
             .state( 'putawayList', {
                 url: '/putaway/list',
                 cache: 'false',

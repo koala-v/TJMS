@@ -43,8 +43,44 @@ namespace WebApi.ServiceModel.TMS
             {                
                 using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
-                    string strSql = "";    
-                    strSql = "select TrxNo,LineItemNo,* from tjms2 where trxno="+request .TrxNo + "";
+                    string strSql = "";
+                    strSql = " select isnull((select tjms1.JobNo from tjms1 where trxno = tjms2.TrxNo),'') as JobNo ," +
+                                " tjms2.TrxNo, " +
+                                " tjms2.LineItemNo," +
+                                " TJMS2.Pcs," +
+                                " TJMS2.GrossWeight," +
+                                " isnull(TJMS2.CargoDescription1, '') as CargoDescription1," +
+                                " isnull(TJMS2.CargoDescription2, '') as CargoDescription2," +
+                                " isnull(TJMS2.CargoDescription3, '') as CargoDescription3," +
+                                " isnull((select tjms3.BargeName from tjms3 where trxno = tjms2.TrxNo and LineItemNo = 1) ,'') as BargeName1 ," +
+                                " isnull((select tjms3.BargeName from tjms3 where trxno = tjms2.TrxNo and LineItemNo = 2) ,'') as BargeName2 ," +
+                                " isnull((select tjms3.BargeName from tjms3 where trxno = tjms2.TrxNo and LineItemNo = 3) ,'') as BargeName3 ," +                   
+                                " (select tjms1.DateCompleted from tjms1 where trxno = tjms2.TrxNo) as DateCompleted," +
+                                " isnull(TJMS2.ContainerNo1, '') as ContainerNo1," +
+                                " isnull(TJMS2.ContainerType1, '') as ContainerType1," +
+                                " tjms2.Pcs1 as Pcs1," +
+                                " isnull(TJMS2.CargoDescription1, '') as CargoDescription1, " +
+                                " isnull(TJMS2.VehicleNo1, '') as VehicleNo1," +
+                                " (select tjms4.StartDateTime from tjms4 where tjms4.trxno = tjms2.TrxNo and tjms4.LineItemNo = tjms2.lineItemNo) as StartDateTime," +
+                                " (select tjms4.EndDateTime from tjms4 where tjms4.trxno = tjms2.TrxNo and tjms4.LineItemNo = tjms2.lineItemNo) as EndDateTime," +
+                                " isnull(TJMS2.ContainerNo2, '') as ContainerNo2," +
+                                " isnull(TJMS2.ContainerType2, '') as ContainerType2," +
+                                " tjms2.Pcs2 as Pcs2," +
+                                " isnull(TJMS2.CargoDescription2, '') as CargoDescription2," +
+                                " isnull(TJMS2.VehicleNo2, '') as VehicleNo2," +
+                                " isnull(TJMS2.ContainerNo3, '') as ContainerNo3," +
+                                " isnull(TJMS2.ContainerType3, '') as ContainerType3," +
+                                " tjms2.Pcs3 as Pcs3," +
+                                " isnull(TJMS2.CargoDescription3, '') as CargoDescription3," +
+                                " isnull(TJMS2.VehicleNo3, '') as VehicleNo3," +
+                                " (select tjms1.ChargeBerthQty from tjms1 where trxno = tjms2.TrxNo) as ChargeBerthQty," +
+                                " (select tjms1.ChargeLiftingQty from tjms1 where trxno = tjms2.TrxNo) as ChargeLiftingQty," +
+                                " isnull((select tjms1.ChargeOther from tjms1 where trxno = tjms2.TrxNo),'') as ChargeOther," +
+                                " isnull((select tjms1.SignedByName from tjms1 where trxno = tjms2.TrxNo),'') as SignedByName," +
+                                " isnull((select tjms1.SignedByNric from tjms1 where trxno = tjms2.TrxNo),'') as SignedByNric," +
+                                " isnull((select tjms1.SignedByDesignation from tjms1 where trxno = tjms2.TrxNo),'') as SignedByDesignation," +
+                                " isnull((select CompanyName from saco1),'') as CompanyName" +
+                                "  from tjms2  where trxno = " + request.TrxNo + " ";      
                     Result = db.Select<tjms2>(strSql);
                 }
             }
@@ -185,129 +221,33 @@ namespace WebApi.ServiceModel.TMS
                         {
                             for (int i = 0; i < ja.Count(); i++)
                             {
-                                if (ja[i]["TableName"] == null || ja[i]["TableName"].ToString() == "")
+                                if (ja[i]["TrxNo"] == null || ja[i]["TrxNo"].ToString() == "")
                                 { continue; }
-                                string strKey = ja[i]["Key"].ToString();
-                                string strTobk2LineItemNo= ja[i]["LineItemNo"].ToString();
-                                string strTableName = ja[i]["TableName"].ToString();
-                                string strRemark = "";
-                                string strStatusCode = "";
-                                string strDCDescription = ja[i]["DCFlag"].ToString();                      
-                                if (ja[i]["Remark"] != null || ja[i]["Remark"].ToString() != "")
-                                    strRemark = ja[i]["Remark"].ToString();
-                                if (ja[i]["StatusCode"] != null || ja[i]["StatusCode"].ToString() != "")
-                                    strStatusCode = ja[i]["StatusCode"].ToString();
-                                if (strStatusCode.ToLower() == "cancel")
-                                {
-                                    string strJobNo = "";
-                                    if (ja[i]["JobNo"] != null || ja[i]["JobNo"].ToString() != "")
-                                        strJobNo = ja[i]["JobNo"].ToString();
-                                    if (strJobNo != "")
-                                    {
-                                        int intMaxLineItemNo = 1;
-                                        List<tjms3> list1 = db.Select<tjms3>("Select Max(LineItemNo) LineItemNo from tjms3 Where JobNo = " + Modfunction.SQLSafeValue(strJobNo));
-                                        if (list1 != null)
-                                        {
-                                            if (list1[0].LineItemNo > 0)
-                                                intMaxLineItemNo = list1[0].LineItemNo + 1;
-                                        }
-                                        db.Insert(new tjms3
-                                        {
-                                            JobNo = strJobNo,
-                                            DateTime = DateTime.Now,
-                                            UpdateDatetime = DateTime.Now,
-                                            RefNo= strTobk2LineItemNo,
-                                            LineItemNo = intMaxLineItemNo,
-                                            AutoFlag = "N",
-                                            StatusCode = "CANCEL",
-                                            UpdateBy = ja[0]["DriverCode"] == null ? "" : Modfunction.SQLSafe(ja[0]["DriverCode"].ToString()),
-                                            Remark = Modfunction.SQLSafe(strRemark),
-                                            Description = ja[0]["CancelDescription"] == null ? "" : Modfunction.SQLSafe(ja[0]["CancelDescription"].ToString())
-                                        });
-
-
-
-                                        string str;
-                                        if (strTobk2LineItemNo != "0")
-                                        {
-                                           
-                                            str = " Note = " + Modfunction.SQLSafeValue(strRemark) + ",DeliveryDate=GETDATE(),ReturnFlag='Y'";
-                                            db.Update(strTableName,
-                                                   str,
-                                                   " BookingNo='" + strKey + "' and LineItemNo='" + strTobk2LineItemNo + "'");
-                                        }
-                                        else
-                                        {
-                                            str = " Note = " + Modfunction.SQLSafeValue(strRemark) + ",DeliveryEndDateTime=GETDATE()";
-                                            db.Update("tjms2",
-                                                   str,
-                                                   " BookingNo='" + strKey + "'");
-                                        }
-
-                                    }
-                                }
-                                else
+                                string strTrxNo = ja[i]["TrxNo"].ToString();
+                                string strLineItemNo = ja[i]["LineItemNo"].ToString();
+                                string SignedByName = ja[i]["SignedByName"].ToString();
+                                string SignedByNric = ja[i]["SignedByNric"].ToString();
+                                string SignedByDesignation = ja[i]["SignedByDesignation"].ToString();
+                                string CompanyName = ja[i]["CompanyName"].ToString();
+                                string str;
+                                if (strLineItemNo != "0")
                                 {
 
-                                    string strJobNo = "";
-                                    if (ja[i]["JobNo"] != null || ja[i]["JobNo"].ToString() != "")
-                                        strJobNo = ja[i]["JobNo"].ToString();
-                                    if (strJobNo != "")
-                                    {
-                                        int intMaxLineItemNo = 1;
-                                        List<tjms3> list1 = db.Select<tjms3>("Select Max(LineItemNo) LineItemNo from tjms3 Where JobNo = " + Modfunction.SQLSafeValue(strJobNo));
-                                        if (list1 != null)
-                                        {
-                                            if (list1[0].LineItemNo > 0)
-                                                intMaxLineItemNo = list1[0].LineItemNo + 1;
-                                        }
-                                        if (strDCDescription == "Collection")
-                                        {
-                                            strDCDescription = "COLLECTED";
-                                        }
-                                        else
-                                        {
-                                            strDCDescription = "DELIVERED";
-                                        }
-                                        db.Insert(new tjms3
-                                        {
-                                            JobNo = strJobNo,
-                                            DateTime = DateTime.Now,
-                                            UpdateDatetime = DateTime.Now,
-                                            RefNo = strTobk2LineItemNo,
-                                            LineItemNo = intMaxLineItemNo,
-                                            AutoFlag = "N",
-                                            StatusCode = "POD",
-                                            UpdateBy = ja[0]["DriverCode"] == null ? "" : Modfunction.SQLSafe(ja[0]["DriverCode"].ToString()),
-                                            Remark = Modfunction.SQLSafe(strRemark),
-                                            Description = strDCDescription
-                                        });
-                                      
-                                    }
+                                    str = " SignedByName = " + Modfunction.SQLSafeValue(SignedByName) + ",SignedByNric= " + Modfunction.SQLSafeValue(SignedByNric) + ",SignedByDesignation= " + Modfunction.SQLSafeValue(SignedByDesignation) + "";
+                                    db.Update("tjms1",
+                                           str,
+                                           " TrxNo='" + strTrxNo + "' ");
 
-
-                                    string str;
-                                    if (strTobk2LineItemNo  != "0")
-                                    {
-                                        str = " Note = " + Modfunction.SQLSafeValue(strRemark) + ",DeliveryDate=GETDATE(),CompleteFlag='Y'";
-                                        db.Update(strTableName,
-                                               str,
-                                               " BookingNo='" + strKey + "' and LineItemNo='" + strTobk2LineItemNo + "'");
-                                    }
-                                    else
-                                    {
-                                        str = " Note = " + Modfunction.SQLSafeValue(strRemark) + ",DeliveryEndDateTime=GETDATE(),StatusCode = 'POD',CompletedFlag='Y'";
-                                        db.Update("tjms2",
-                                               str,
-                                               " BookingNo='" + strKey + "'");
-                                    }
-
+                                     str = " CompanyName = " + Modfunction.SQLSafeValue(CompanyName) + "";
+                                    db.Update("saco1",
+                                           str
+                                           );
                                 }
 
                             }
                             Result = 1;
                         }
-                    }
+                    }          
                 }
             }
             catch { throw; }

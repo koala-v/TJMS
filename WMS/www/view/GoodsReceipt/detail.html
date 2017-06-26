@@ -4,83 +4,97 @@
 		<div class="h1 title">Tjms Detail</div>
 	</ion-header-bar>
 	<ion-content>
-		<div class="list card">
-			<div class="item" style="padding-top: 6px;padding-bottom: 6px;">
+		<div class="card">
+			<div class="item" style="padding: 0px">
 				<div class="row">
-					<div class="col" style="max-width: 35%;">
-						<h2>Customer&nbsp;:</h2>
+					<div class="col ">
+						<p style="font-weight:bold;"> &nbsp;No of Packages :</p>
 					</div>
 					<div class="col">
-						<h2><span ng-bind="Detail.Customer"></span></h2>
+						<p><span ng-bind="Detail.Tjms2.Pcs"></span></span>
+						</p>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col" style="max-width: 35%;">
-						<p>GRN&nbsp;:</p>
+					<div class="col ">
+						<p style="font-weight:bold;">Gross Weight :</p>
 					</div>
 					<div class="col">
-						<p><span ng-bind="Detail.GRN"></span></p>
+						<p><span ng-bind="Detail.Tjms2.GrossWeight"></span></p>
 					</div>
 				</div>
 			</div>
-			<div class="item item-body" style="padding-top: 6px;padding-bottom: 6px;">
-				<div class="list">
-					<div class="row">
-						<div class="col col-80" style="padding:0px;">
-							<label class="item item-input">
-								<span class="input-label" style="padding-top:2px; padding-bottom: 2px;">BarCode&nbsp;&nbsp;:</span>
-								<input type="text" id="txt-barcode" ng-model="Detail.Scan.BarCode" style="padding-right: 14px;" ng-keypress="enter($event, 'barcode')">
-							</label>
-						</div>
-						<div class="col col-10">
-							<button class="button button-clear button-positive button-small" ng-click="openCam('BarCode')"><i class="icon ion-qr-scanner"></i></button>
-						</div>
-						<div class="col">
-							<button class="button button-clear button-positive button-small" ng-click="clearInput('BarCode')"><i class="icon ion-android-close"></i></button>
-						</div>
-					</div>
-					<label class="item item-input">
-						<span class="input-label" style="padding-top:2px; padding-bottom: 2px; font-size: small;">Product Code : <span ng-bind="Detail.Impr1.ProductCode"></span></span>
-					</label>
-					<label class="item item-input">
-						<span class="input-label" style="padding-top:2px; padding-bottom: 2px; font-size: small;">Description : <span ng-bind="Detail.Impr1.ProductDescription"></span></span>
-					</label>
-					<label class="item item-input">
-						<span class="input-label" style="padding-top:2px; padding-bottom: 2px; font-size: small;">Cust Batch No : <span ng-bind="Detail.Imgr2.CustBatchNo"></span></span>
-					</label>
-					<div class="row" ng-if="Detail.Scan.SerialNoFlag='Y'" class="animate-if">
-						<div class="col col-80" style="padding:0px;">
-							<label class="item item-input">
-								<span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Serial No&nbsp;&nbsp;:</span>
-								<input type="text" id="txt-sn" ng-model="Detail.Scan.SerialNo" style="padding-right: 14px;" ng-keypress="enter($event, 'sn')" readonly>
-							</label>
-						</div>
-						<div class="col col-10">
-							<button class="button button-clear button-small" ng-click="openCam('SerialNo')"><i class="icon ion-qr-scanner"></i></button>
-						</div>
-						<div class="col">
-							<button class="button button-clear button-small" ng-click="clearInput('SerialNo')"><i class="icon ion-android-close"></i></button>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col col-90" style="padding:0px;">
-							<label class="item item-input">
-								<span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Qty&nbsp;&nbsp;:</span>
-								<span id="txt-qty" ng-bind="Detail.Scan.Qty"></span>
-							</label>
-						</div>
-						<div class="col">
-							<button class="button button-clear button-small" ng-click="changeQty()"><i class="icon ion-android-create"></i></button>
-						</div>
-					</div>
-				</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Description of Cargo :</p>
+				<p><span ng-bind="Detail.Tjms2.CargoDescription"></span></p>
 			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Officer&nbsp;In&nbsp; Charge  &nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<p><span ng-bind="Detail.Tjms2.OfficeInChargeName"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Vessel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<p><span ng-bind="Detail.Tjms2.Vessel"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<p><span ng-bind="Detail.Tjms2.DateCompleted"></span></p>
+			</div>
+
+			<!-- <div class="col col-60">
+									<button class="button button-light" id="id_DateCompleted" ng-click="OnDatePicker()">
+											<i class="icon ion-calendar"></i>&nbsp;&nbsp;
+											<span ng-bind="Detail.Tjms2.DateCompleted"></span>&nbsp;
+											<i class="icon ion-android-arrow-dropdown"></i>
+									</button>
+							</div> -->
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Container No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<p><span ng-bind="Detail.Tjms2.ContainerNo1"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Container Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<p><span ng-bind="Detail.Tjms2.ContainerType1"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">No of Pkg /Cntr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<p><span ng-bind="Detail.Tjms2.Pcs1"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+				<p><span ng-bind="Detail.Tjms2.CargoDescription1"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Vehicle No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+				<p><span ng-bind="Detail.Tjms2.VehicleNo1"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Start Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+				<p><span ng-bind="Detail.Tjms2.StartDateTime"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">End Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+				<p><span ng-bind="Detail.Tjms2.EndDateTime"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Berthing/UnBerthing:</p>
+				<p><span ng-bind="Detail.Tjms2.ChargeBerthQty"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Lifting Supervisor&nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<p><span ng-bind="Detail.Tjms2.ChargeLiftingQty"></span></p>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Others &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+				<p><span ng-bind="Detail.Tjms2.ChargeOther"></span></p>
+			</div>
+
 		</div>
 		</div>
+		</div>
+
 	</ion-content>
 	<ion-footer-bar class="bar-positive hide-on-keyboard-open">
 		<div class="button-bar">
-			<button class="button icon ion-android-done" ng-click="checkConfirm()">
+			<button class="button icon ion-android-done" ng-click="gotoConfirm()">
 				&nbsp;Confirm
 			</button>
 			<button class="button icon ion-arrow-return-right" ng-click="returnList()">
@@ -88,4 +102,4 @@
 			</button>
 		</div>
 	</ion-footer-bar>
-	</ion-view>
+</ion-view>

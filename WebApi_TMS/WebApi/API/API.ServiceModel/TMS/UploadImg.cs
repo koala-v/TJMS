@@ -96,9 +96,7 @@ namespace WebApi.ServiceModel.TMS
                     {
                         using (var db = DbConnectionFactory.OpenDbConnection())
                         {
-                            db.Update("tjms2",
-                                    "AttachmentFlag = 'Y'",
-                                  " BookingNo='" + request.Key + "'");
+                           
                         }
                     }
                 }

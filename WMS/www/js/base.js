@@ -20,7 +20,15 @@ var objClone = function ( obj ) {
     return newObj;
 };
 
-
+var checkDateTimeisEmpty = function (datetime) {
+    if (is.equal(moment(datetime).format('DD-MMM-YYYY'), '01-Jan-0001')) {
+        datetime = '';
+    }
+    if (is.not.empty(datetime)) {
+        datetime = moment(datetime).format('DD MMM YYYY hh:mm').toString();
+    }
+    return datetime;
+};
 var db_add_Imsn1_Receipt = function ( imsn1 ) {
     if ( dbWms ) {
         dbWms.transaction( function ( tx ) {

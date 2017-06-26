@@ -941,18 +941,18 @@ appControllers.controller('PickingDetailCtrl', [
             GetImgi2s($scope.Detail.GIN);
         });
 
-        $scope.GoToCartonDetail = function (Imgi2, Detail) {
-            if (Imgi2 !== null) {
-                $state.go('CartonDetail', {
-                    'LineItemNo': Imgi2.LineItemNo,
-                    'CustomerCode': Detail.Customer,
-                    'TrxNo': Imgi2.TrxNo,
-                    'GoodsIssueNoteNo': Detail.GIN
-                }, {
-                    reload: true
-                });
-            }
-        };
+        // $scope.GoToCartonDetail = function (Imgi2, Detail) {
+        //     if (Imgi2 !== null) {
+        //         $state.go('CartonDetail', {
+        //             'LineItemNo': Imgi2.LineItemNo,
+        //             'CustomerCode': Detail.Customer,
+        //             'TrxNo': Imgi2.TrxNo,
+        //             'GoodsIssueNoteNo': Detail.GIN
+        //         }, {
+        //             reload: true
+        //         });
+        //     }
+        // };
 
         var confirmImgi3 = function () {
             SqlService.Select('Imgi3_Picking', '*').then(function (results) {
