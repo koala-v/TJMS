@@ -56,44 +56,44 @@ namespace WebApi.ServiceModel.TMS
         public int ConfirmAll_tjms1(tjms request)
         {
             int Result = -1;
-            try
-            {
-                using (var db = DbConnectionFactory.OpenDbConnection())
-                {
-                    if (request.confirmAllString != null && request.confirmAllString != "")
-                    {
-                        JArray ja = (JArray)JsonConvert.DeserializeObject(request.confirmAllString);
-                        if (ja != null)
-                        {
-                            for (int i = 0; i < ja.Count(); i++)
-                            {
-                                string strJobNo = "";
-                                string strActualArrivalDate = "";
-                                string strDeliveryDate = "";
-                                if (ja[i]["JobNo"] != null || ja[i]["JobNo"].ToString() != "")
-                                strJobNo = ja[i]["JobNo"].ToString();
-                                strActualArrivalDate = ja[i]["ActualArrivalDate"].ToString();
-                                strDeliveryDate = ja[i]["DeliveryDate"].ToString();
-                                if (strJobNo != "")
-                                {
-                                    if (strActualArrivalDate != "") {
-                                    db.Update("tjms3",
-                                      " DateTime = '" + Modfunction.SQLSafe(strActualArrivalDate) + "'",
-                                      " JobNo='" + strJobNo + "' and Description = 'ACTUAL ARRIVAL DATE'");
-                                    }
-                                    if (strDeliveryDate != "") { 
-                                    db.Update("tjms1",
-                                      " DeliveryDateTime = '" + Modfunction.SQLSafe(strDeliveryDate) + "'",
-                                      " JobNo='" + strJobNo + "'");
-                                    }
-                                }
-                            }
-                            Result = 1;
-                        }
-                    }
-                }
-            }
-            catch { throw; }
+            //try
+            //{
+            //    using (var db = DbConnectionFactory.OpenDbConnection())
+            //    {
+            //        if (request.confirmAllString != null && request.confirmAllString != "")
+            //        {
+            //            JArray ja = (JArray)JsonConvert.DeserializeObject(request.confirmAllString);
+            //            if (ja != null)
+            //            {
+            //                for (int i = 0; i < ja.Count(); i++)
+            //                {
+            //                    string strJobNo = "";
+            //                    string strActualArrivalDate = "";
+            //                    string strDeliveryDate = "";
+            //                    if (ja[i]["JobNo"] != null || ja[i]["JobNo"].ToString() != "")
+            //                    strJobNo = ja[i]["JobNo"].ToString();
+            //                    strActualArrivalDate = ja[i]["ActualArrivalDate"].ToString();
+            //                    strDeliveryDate = ja[i]["DeliveryDate"].ToString();
+            //                    if (strJobNo != "")
+            //                    {
+            //                        if (strActualArrivalDate != "") {
+            //                        db.Update("tjms3",
+            //                          " DateTime = '" + Modfunction.SQLSafe(strActualArrivalDate) + "'",
+            //                          " JobNo='" + strJobNo + "' and Description = 'ACTUAL ARRIVAL DATE'");
+            //                        }
+            //                        if (strDeliveryDate != "") { 
+            //                        db.Update("tjms1",
+            //                          " DeliveryDateTime = '" + Modfunction.SQLSafe(strDeliveryDate) + "'",
+            //                          " JobNo='" + strJobNo + "'");
+            //                        }
+            //                    }
+            //                }
+            //                Result = 1;
+            //            }
+            //        }
+            //    }
+            //}
+            //catch { throw; }
             return Result;
         }
 
