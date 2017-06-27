@@ -91,120 +91,120 @@ namespace WebApi.ServiceModel.TMS
         public int confirm_tjms2(Tobk request)
         {
             int Result = -1;
-            try
-            {
-                using (var db = DbConnectionFactory.OpenDbConnection())
-                {
-                    string strJobNo = request.JobNo;
-                    if (strJobNo != "" && strJobNo != null )
-                    {
-                        int intMaxLineItemNo = 1;
-                        List<tjms3> list1 = db.Select<tjms3>("Select Max(LineItemNo) LineItemNo from tjms3 Where JobNo = " + Modfunction.SQLSafeValue(strJobNo));
-                        if (list1 != null)
-                        {
-                            if (list1[0].LineItemNo > 0)
-                                intMaxLineItemNo = list1[0].LineItemNo + 1;
-                        }
-                        if (request.DCDescription == "Collection")
-                        {
-                            request.DCDescription = "COLLECTED";
-                        }
-                        else
-                        {
-                            request.DCDescription = "DELIVERED";
-                        }
-                        db.Insert(new tjms3
-                        {
-                            JobNo = Modfunction.SQLSafe(strJobNo),
-                            DateTime = DateTime.Now,
-                            UpdateDatetime = DateTime.Now,
-                            LineItemNo = intMaxLineItemNo,
-                            RefNo = Modfunction.SQLSafe(request.LineItemNo).ToString(),
-                            AutoFlag = "N",
-                            StatusCode = "POD",
-                            UpdateBy = Modfunction.SQLSafe(request.DriverCode),
-                            Remark = Modfunction.SQLSafeValue(request.Remark),
-                            Description = Modfunction.SQLSafe(request.DCDescription)
-                        });
+            //try
+            //{
+            //    using (var db = DbConnectionFactory.OpenDbConnection())
+            //    {
+            //        string strJobNo = request.JobNo;
+            //        if (strJobNo != "" && strJobNo != null )
+            //        {
+            //            int intMaxLineItemNo = 1;
+            //            List<tjms3> list1 = db.Select<tjms3>("Select Max(LineItemNo) LineItemNo from tjms3 Where JobNo = " + Modfunction.SQLSafeValue(strJobNo));
+            //            if (list1 != null)
+            //            {
+            //                if (list1[0].LineItemNo > 0)
+            //                    intMaxLineItemNo = list1[0].LineItemNo + 1;
+            //            }
+            //            if (request.DCDescription == "Collection")
+            //            {
+            //                request.DCDescription = "COLLECTED";
+            //            }
+            //            else
+            //            {
+            //                request.DCDescription = "DELIVERED";
+            //            }
+            //            db.Insert(new tjms3
+            //            {
+            //                JobNo = Modfunction.SQLSafe(strJobNo),
+            //                DateTime = DateTime.Now,
+            //                UpdateDatetime = DateTime.Now,
+            //                LineItemNo = intMaxLineItemNo,
+            //                RefNo = Modfunction.SQLSafe(request.LineItemNo).ToString(),
+            //                AutoFlag = "N",
+            //                StatusCode = "POD",
+            //                UpdateBy = Modfunction.SQLSafe(request.DriverCode),
+            //                Remark = Modfunction.SQLSafeValue(request.Remark),
+            //                Description = Modfunction.SQLSafe(request.DCDescription)
+            //            });
                      
-                    }
+            //        }
 
 
-                    string str;
-                    if( request.LineItemNo != "0")
-                     {
-                        str = " Note = " + Modfunction.SQLSafeValue(request.Remark) + ",DeliveryDate=GETDATE(),CompleteFlag='Y'";
-                        db.Update(request.TableName,
-                               str,
-                               " BookingNo='" + request.Key + "' and LineItemNo = '" + request.LineItemNo + "' ");
-                    } else {
-                        str = " Note = " + Modfunction.SQLSafeValue(request.Remark) + ",DeliveryEndDateTime=GETDATE(),StatusCode = 'POD',CompletedFlag='Y'";
-                        db.Update("tjms2",
-                               str,
-                               " BookingNo='" + request.Key + "'");
-                    }
+            //        string str;
+            //        if( request.LineItemNo != "0")
+            //         {
+            //            str = " Note = " + Modfunction.SQLSafeValue(request.Remark) + ",DeliveryDate=GETDATE(),CompleteFlag='Y'";
+            //            db.Update(request.TableName,
+            //                   str,
+            //                   " BookingNo='" + request.Key + "' and LineItemNo = '" + request.LineItemNo + "' ");
+            //        } else {
+            //            str = " Note = " + Modfunction.SQLSafeValue(request.Remark) + ",DeliveryEndDateTime=GETDATE(),StatusCode = 'POD',CompletedFlag='Y'";
+            //            db.Update("tjms2",
+            //                   str,
+            //                   " BookingNo='" + request.Key + "'");
+            //        }
 
-                }
+            //    }
 
-            }
-            catch { throw; }
+            //}
+            //catch { throw; }
             return Result;
         }
 
         public int updatePickupTime(Tobk request) {
             int Result = -1;
-            try
-            {
-                using (var db = DbConnectionFactory.OpenDbConnection())
-                {
-                    if (request.UpdateAllString != null && request.UpdateAllString != "")
-                    {
-                        JArray ja = (JArray)JsonConvert.DeserializeObject(request.UpdateAllString);
-                        if (ja != null)
-                        {
-                            for (int i = 0; i < ja.Count(); i++)
-                            {
+            //try
+            //{
+            //    using (var db = DbConnectionFactory.OpenDbConnection())
+            //    {
+            //        if (request.UpdateAllString != null && request.UpdateAllString != "")
+            //        {
+            //            JArray ja = (JArray)JsonConvert.DeserializeObject(request.UpdateAllString);
+            //            if (ja != null)
+            //            {
+            //                for (int i = 0; i < ja.Count(); i++)
+            //                {
                               
-                                string strKey = ja[i]["Key"].ToString();
-                                string strTobk2LineItemNo = ja[i]["LineItemNo"].ToString();              
-                                    string strJobNo = "";
-                                    if (ja[i]["JobNo"] != null || ja[i]["JobNo"].ToString() != "")
-                                        strJobNo = ja[i]["JobNo"].ToString();
-                                    if (strJobNo != "")
-                                    {
-                                        int intMaxLineItemNo = 1;
-                                        List<tjms3> list1 = db.Select<tjms3>("Select Max(LineItemNo) LineItemNo from tjms3 Where JobNo = " + Modfunction.SQLSafeValue(strJobNo));
-                                        if (list1 != null)
-                                        {
-                                            if (list1[0].LineItemNo > 0)
-                                                intMaxLineItemNo = list1[0].LineItemNo + 1;
-                                        }
-                                        db.Insert(new tjms3
-                                        {
-                                            JobNo = strJobNo,
-                                            DateTime = Convert.ToDateTime(ja[i]["DateTime"]),
-                                            UpdateDatetime = DateTime.Now,
-                                            RefNo = strTobk2LineItemNo,
-                                            LineItemNo = intMaxLineItemNo,                                         
-                                            StatusCode = "USE",
-                                            UpdateBy = ja[0]["DriverCode"] == null ? "" : Modfunction.SQLSafe(ja[0]["DriverCode"].ToString()),                                          
-                                            Description = "PICKUP"
-                                        });
+            //                    string strKey = ja[i]["Key"].ToString();
+            //                    string strTobk2LineItemNo = ja[i]["LineItemNo"].ToString();              
+            //                        string strJobNo = "";
+            //                        if (ja[i]["JobNo"] != null || ja[i]["JobNo"].ToString() != "")
+            //                            strJobNo = ja[i]["JobNo"].ToString();
+            //                        if (strJobNo != "")
+            //                        {
+            //                            int intMaxLineItemNo = 1;
+            //                            List<tjms3> list1 = db.Select<tjms3>("Select Max(LineItemNo) LineItemNo from tjms3 Where JobNo = " + Modfunction.SQLSafeValue(strJobNo));
+            //                            if (list1 != null)
+            //                            {
+            //                                if (list1[0].LineItemNo > 0)
+            //                                    intMaxLineItemNo = list1[0].LineItemNo + 1;
+            //                            }
+            //                            db.Insert(new tjms3
+            //                            {
+            //                                JobNo = strJobNo,
+            //                                DateTime = Convert.ToDateTime(ja[i]["DateTime"]),
+            //                                UpdateDatetime = DateTime.Now,
+            //                                RefNo = strTobk2LineItemNo,
+            //                                LineItemNo = intMaxLineItemNo,                                         
+            //                                StatusCode = "USE",
+            //                                UpdateBy = ja[0]["DriverCode"] == null ? "" : Modfunction.SQLSafe(ja[0]["DriverCode"].ToString()),                                          
+            //                                Description = "PICKUP"
+            //                            });
 
 
 
                                
                              
-                                }
+            //                    }
                             
 
-                            }
-                            Result = 1;
-                        }
-                    }
-                }
-            }
-            catch { throw; }
+            //                }
+            //                Result = 1;
+            //            }
+            //        }
+            //    }
+            //}
+            //catch { throw; }
             return Result;
         }
         public int UpdateAll_tjms2(Tobk request)
@@ -229,11 +229,16 @@ namespace WebApi.ServiceModel.TMS
                                 string SignedByNric = ja[i]["SignedByNric"].ToString();
                                 string SignedByDesignation = ja[i]["SignedByDesignation"].ToString();
                                 string CompanyName = ja[i]["CompanyName"].ToString();
+                                string strDateCompleted = ja[i]["DateCompleted"].ToString();
+                                DateTime dt = DateTime.Now;
+                                if (strDateCompleted != "" && strDateCompleted != null) {
+                                    strDateCompleted = strDateCompleted +" "+ dt.GetDateTimeFormats('t')[0].ToString();
+                                }
                                 string str;
                                 if (strLineItemNo != "0")
                                 {
 
-                                    str = " SignedByName = " + Modfunction.SQLSafeValue(SignedByName) + ",SignedByNric= " + Modfunction.SQLSafeValue(SignedByNric) + ",SignedByDesignation= " + Modfunction.SQLSafeValue(SignedByDesignation) + "";
+                                    str = " SignedByName = " + Modfunction.SQLSafeValue(SignedByName) + ",SignedByNric= " + Modfunction.SQLSafeValue(SignedByNric) + ",SignedByDesignation= " + Modfunction.SQLSafeValue(SignedByDesignation) + ",DateCompleted=" + Modfunction.SQLSafeValue(strDateCompleted) + "";
                                     db.Update("tjms1",
                                            str,
                                            " TrxNo='" + strTrxNo + "' ");

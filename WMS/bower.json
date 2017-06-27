@@ -5,7 +5,7 @@
     "jquery": ">=2.1.4",
     "ngCordova": ">=0.1.23-alpha",
     "ion-md-input": ">=1.0.4",
-    "ionic-datepicker": "^0.9.0",
+    "ionic-datepicker": "^1.2.1",
     "ionic-ion-header-shrink": "*",
     "ui-select": "angular-ui-select#^0.18.1",
     "moment": "^2.11.2",

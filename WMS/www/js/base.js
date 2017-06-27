@@ -26,7 +26,16 @@ var checkDateTimeisEmpty = function (datetime) {
     }
     if (is.not.empty(datetime)) {
         datetime = moment(datetime).format('DD MMM YYYY hh:mm').toString();
+  }
+    return datetime;
+};
+var checkDateCompleted = function (datetime) {
+    if (is.equal(moment(datetime).format('DD-MMM-YYYY'), '01-Jan-0001')) {
+        datetime = '';
     }
+    if (is.not.empty(datetime)) {
+        datetime = moment(datetime).format('YYYY-MM-DD').toString();
+  }
     return datetime;
 };
 var db_add_Imsn1_Receipt = function ( imsn1 ) {

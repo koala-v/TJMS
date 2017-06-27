@@ -45,9 +45,6 @@ appControllers.controller('GrListCtrl', [
                 $cordovaKeyboard.close();
             }
         };
-        $scope.showDate = function (utc) {
-            return moment(utc).format('DD-MMM-YYYY');
-        };
         $scope.GoToDetail = function (Tjms1) {
             if (Tjms1 !== null) {
                 $state.go('grDetail', {
@@ -79,7 +76,7 @@ appControllers.controller('GrDetailCtrl', [
     '$cordovaKeyboard',
     '$cordovaToast',
     '$cordovaBarcodeScanner',
-    // 'ionicDatePicker',
+   'ionicDatePicker',
     'SqlService',
     'ApiService',
     'PopupService',
@@ -97,7 +94,7 @@ appControllers.controller('GrDetailCtrl', [
         $cordovaKeyboard,
         $cordovaToast,
         $cordovaBarcodeScanner,
-        // ionicDatePicker,
+       ionicDatePicker,
         SqlService,
         ApiService,
         PopupService) {
@@ -123,18 +120,28 @@ appControllers.controller('GrDetailCtrl', [
             });
             // }
         };
-        //     $scope.OnDatePicker = function () {
-        //     var ipObj1 = {
-        //         callback: function (val) { //Mandatory
-        //             // console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-        //             $scope.Detail.Tjms2.DateCompleted = moment(new Date(val)).format('YYYYMMDD');
-        //         },
-        //         to: new Date(),
-        //     };
-        //     ionicDatePicker.openDatePicker(ipObj1);
-        // };
+
+        var UpdateTjms2 =function(){
+          var Tjms2Filter = "TrxNo='" + $scope.Detail.Tjms2.TrxNo + "' and LineItemNo='" + $scope.Detail.Tjms2.LineItemNo + "' ";
+          var objTjms2 = {
+              DateCompleted:$scope.Detail.Tjms2.DateCompleted
+          };
+          SqlService.Update('Tjms2', objTjms2, Tjms2Filter).then(function (res) {});
+        };
+            $scope.OnDatePicker = function () {
+            var ipObj1 = {
+                callback: function (val) { //Mandatory
+                    //  console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+                     $scope.Detail.Tjms2.DateCompleted = moment(new Date(val)).format('YYYY-MM-DD');
+
+                },
+                to: new Date(),
+            };
+           ionicDatePicker.openDatePicker(ipObj1);
+        };
 
         $scope.gotoConfirm = function () {
+          UpdateTjms2();
             $state.go('jobListingConfirm', {
                 'TrxNo': $scope.Detail.TrxNo,
 
@@ -173,7 +180,7 @@ appControllers.controller('GrDetailCtrl', [
                         $scope.Detail.Tjms2.Vessel = $scope.Detail.Tjms2.BargeName1 + ' ' + $scope.Detail.Tjms2.BargeName2 + ' ' + $scope.Detail.Tjms2.BargeName3;
                         $scope.Detail.Tjms2.StartDateTime = checkDateTimeisEmpty($scope.Detail.Tjms2.StartDateTime);
                         $scope.Detail.Tjms2.EndDateTime = checkDateTimeisEmpty($scope.Detail.Tjms2.EndDateTime);
-                        $scope.Detail.Tjms2.DateCompleted = checkDateTimeisEmpty($scope.Detail.Tjms2.DateCompleted);
+                        $scope.Detail.Tjms2.DateCompleted = checkDateCompleted($scope.Detail.Tjms2.DateCompleted);
                         getSignature(objImgr2);
                     }
                 });
