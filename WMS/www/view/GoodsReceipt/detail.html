@@ -3,7 +3,7 @@
 		<button class="button button-icon icon ion-android-arrow-back" ng-click="returnList()"></button>
 		<div class="h1 title">Tjms Detail</div>
 	</ion-header-bar>
-	<ion-content>
+	<ion-content overflow-scroll="true">
 		<div class="card">
 			<div class="item" style="padding: 0px">
 				<div class="row">
@@ -24,11 +24,15 @@
 			</div>
 			<div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">Description of Cargo :</p>
-				<p><span ng-bind="Detail.Tjms2.CargoDescription"  style="white-space: normal;"></span></p>
+				<p><span ng-bind="Detail.Tjms2.CargoDescription" style="white-space: normal;"></span></p>
 			</div>
 			<div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">Officer&nbsp;In&nbsp; Charge  &nbsp;&nbsp;&nbsp;&nbsp; :</p>
-				<p><span ng-bind="Detail.Tjms2.OfficeInChargeName"></span></p>
+				<p style="font-weight:bold;">Officer&nbsp;In&nbsp; Charge &nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<!-- <p><span ng-bind="Detail.Tjms2.OfficeInChargeName"></span></p> -->
+				<label class="item item-input">
+					<textarea wrap="hard" cols="48px" ng-model="Detail.Tjms2.OfficeInChargeName" rows="4">
+					</textarea>
+				</label>
 			</div>
 			<div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">Vessel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
@@ -36,17 +40,61 @@
 			</div>
 			<div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
-				<!-- <p><span ng-bind="Detail.Tjms2.DateCompleted"></span></p> -->
 			</div>
 			<div class="col col-60">
-									<button class="button button-light" id="id_DateCompleted" ng-click="OnDatePicker()">
-											<i class="icon ion-calendar"></i>&nbsp;&nbsp;
-											<span ng-bind="Detail.Tjms2.DateCompleted"></span>&nbsp;
-											<i class="icon ion-android-arrow-dropdown"></i>
-									</button>
+				<button class="button button-light" id="id_DateCompleted" ng-click="OnDatePicker()">
+					<i class="icon ion-calendar"></i>&nbsp;&nbsp;
+					<span ng-bind="Detail.Tjms2.DateCompleted"></span>&nbsp;
+					<i class="icon ion-android-arrow-dropdown"></i>
+				</button>
 			</div>
-					<!-- Container List==================== start -->
-			<div class="item" style="padding: 0px">
+
+			<!-- Container List==================== start -->
+
+			<div class="imc-scroll">
+				<div>
+					<table border="1px">
+						<tr>
+							<th> Container No &nbsp;</th>
+							<th> Container Type &nbsp;</th>
+							<th> No of Pkg /Cntr &nbsp;</th>
+							<th> Description &nbsp;</th>
+							<th> Vehicle &nbsp;</th>
+							<th> Start Time &nbsp;</th>
+							<th> End Time &nbsp;</th>
+						</tr>
+						<tr>
+							<td> <span ng-bind="Detail.Tjms2.ContainerNo1"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.ContainerType1"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.Pcs1"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.CargoDescription1"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.VehicleNo1"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.StartDateTime"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.EndDateTime"></span></td>
+						</tr>
+						<tr>
+							<td> <span ng-bind="Detail.Tjms2.ContainerNo2"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.ContainerType2"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.Pcs2"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.CargoDescription2"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.VehicleNo2"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.StartDateTime"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.EndDateTime"></span></td>
+						</tr>
+						<tr>
+							<td> <span ng-bind="Detail.Tjms2.ContainerNo3"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.ContainerType3"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.Pcs3"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.CargoDescription3"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.VehicleNo3"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.StartDateTime"></span> &nbsp;</td>
+							<td> <span ng-bind="Detail.Tjms2.EndDateTime"></span></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<!-- <div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">Container No 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
 				<p><span ng-bind="Detail.Tjms2.ContainerNo1"></span></p>
 			</div>
@@ -66,14 +114,7 @@
 				<p style="font-weight:bold;">Vehicle No 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
 				<p><span ng-bind="Detail.Tjms2.VehicleNo1"></span></p>
 			</div>
-			<!-- <div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">Start Time 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
-				<p><span ng-bind="Detail.Tjms2.StartDateTime"></span></p>
-			</div>
-			<div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">End Time 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
-				<p><span ng-bind="Detail.Tjms2.EndDateTime"></span></p>
-			</div> -->
+
 			<div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">Container No 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
 				<p><span ng-bind="Detail.Tjms2.ContainerNo2"></span></p>
@@ -94,14 +135,7 @@
 				<p style="font-weight:bold;">Vehicle No 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
 				<p><span ng-bind="Detail.Tjms2.VehicleNo2"></span></p>
 			</div>
-			<!-- <div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">Start Time 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
-				<p><span ng-bind="Detail.Tjms2.StartDateTime"></span></p>
-			</div>
-			<div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">End Time 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
-				<p><span ng-bind="Detail.Tjms2.EndDateTime"></span></p>
-			</div> -->
+
 			<div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">Container No 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
 				<p><span ng-bind="Detail.Tjms2.ContainerNo3"></span></p>
@@ -129,19 +163,29 @@
 			<div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">End Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
 				<p><span ng-bind="Detail.Tjms2.EndDateTime"></span></p>
-			</div>
+			</div> -->
 			<!-- Container List==================== end -->
 			<div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">Berthing/UnBerthing:</p>
-				<p><span ng-bind="Detail.Tjms2.ChargeBerthQty"></span></p>
+				<!-- <p><span ng-bind="Detail.Tjms2.ChargeBerthQty"></span></p> -->
+				<label class="item item-input">
+					<input type="number" id="" ng-model="Detail.Tjms2.ChargeBerthQty" style="padding-right:1em;padding-top: 0px; ">
+				</label>
 			</div>
 			<div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">Lifting Supervisor&nbsp;&nbsp;&nbsp;&nbsp; :</p>
-				<p><span ng-bind="Detail.Tjms2.ChargeLiftingQty"></span></p>
+				<label class="item item-input">
+					<!-- <p><span ng-bind="Detail.Tjms2.ChargeLiftingQty"></span></p> -->
+					<input type="number" id="" ng-model="Detail.Tjms2.ChargeLiftingQty" style="padding-right:1em;padding-top: 0px;">
+				</label>
 			</div>
 			<div class="item" style="padding: 0px">
 				<p style="font-weight:bold;">Others &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
-				<p><span ng-bind="Detail.Tjms2.ChargeOther" style="white-space: normal;"></span></p>
+				<!-- <p><span ng-bind="Detail.Tjms2.ChargeOther" style="white-space: normal;"></span></p> -->
+				<label class="item item-input">
+					<textarea wrap="hard" cols="48px" ng-model="Detail.Tjms2.ChargeOther" rows="4">
+					</textarea>
+				</label>
 			</div>
 		</div>
 		</div>

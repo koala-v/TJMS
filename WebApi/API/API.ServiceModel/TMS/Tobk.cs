@@ -52,6 +52,7 @@ namespace WebApi.ServiceModel.TMS
                                 " isnull(TJMS2.CargoDescription1, '') as CargoDescription1," +
                                 " isnull(TJMS2.CargoDescription2, '') as CargoDescription2," +
                                 " isnull(TJMS2.CargoDescription3, '') as CargoDescription3," +
+                                 " isnull(TJMS2.OfficeInChargeName, '') as OfficeInChargeName," +
                                 " isnull((select tjms3.BargeName from tjms3 where trxno = tjms2.TrxNo and LineItemNo = 1) ,'') as BargeName1 ," +
                                 " isnull((select tjms3.BargeName from tjms3 where trxno = tjms2.TrxNo and LineItemNo = 2) ,'') as BargeName2 ," +
                                 " isnull((select tjms3.BargeName from tjms3 where trxno = tjms2.TrxNo and LineItemNo = 3) ,'') as BargeName3 ," +                   
@@ -221,6 +222,8 @@ namespace WebApi.ServiceModel.TMS
                         {
                             for (int i = 0; i < ja.Count(); i++)
                             {
+                                int ChargeBerthQty;
+                                int ChargeLiftingQty;
                                 if (ja[i]["TrxNo"] == null || ja[i]["TrxNo"].ToString() == "")
                                 { continue; }
                                 string strTrxNo = ja[i]["TrxNo"].ToString();
@@ -230,6 +233,26 @@ namespace WebApi.ServiceModel.TMS
                                 string SignedByDesignation = ja[i]["SignedByDesignation"].ToString();
                                 string CompanyName = ja[i]["CompanyName"].ToString();
                                 string strDateCompleted = ja[i]["DateCompleted"].ToString();
+                                string OfficeInChargeName = ja[i]["OfficeInChargeName"].ToString();
+                                if (ja[i]["ChargeBerthQty"].ToString() == "")
+                                {
+                                    ChargeBerthQty = 0;
+                                }
+                                else
+                                {
+                                     ChargeBerthQty = int.Parse(ja[i]["ChargeBerthQty"].ToString());
+                                }
+
+                                if (ja[i]["ChargeLiftingQty"].ToString() == "")
+                                {
+                                    ChargeLiftingQty = 0;
+                                }
+                                else
+                                {
+                                    ChargeLiftingQty = int.Parse(ja[i]["ChargeLiftingQty"].ToString());
+                                }
+
+                                string ChargeOther = ja[i]["ChargeOther"].ToString();
                                 DateTime dt = DateTime.Now;
                                 if (strDateCompleted != "" && strDateCompleted != null) {
                                     strDateCompleted = strDateCompleted +" "+ dt.GetDateTimeFormats('t')[0].ToString();
@@ -238,12 +261,17 @@ namespace WebApi.ServiceModel.TMS
                                 if (strLineItemNo != "0")
                                 {
 
-                                    str = " SignedByName = " + Modfunction.SQLSafeValue(SignedByName) + ",SignedByNric= " + Modfunction.SQLSafeValue(SignedByNric) + ",SignedByDesignation= " + Modfunction.SQLSafeValue(SignedByDesignation) + ",DateCompleted=" + Modfunction.SQLSafeValue(strDateCompleted) + "";
+                                    str = " SignedByName = " + Modfunction.SQLSafeValue(SignedByName) + ",SignedByNric= " + Modfunction.SQLSafeValue(SignedByNric) + ",SignedByDesignation= " + Modfunction.SQLSafeValue(SignedByDesignation) + ",DateCompleted=" + Modfunction.SQLSafeValue(strDateCompleted) +  ",ChargeBerthQty="+ ChargeBerthQty + ",ChargeLiftingQty="+ ChargeLiftingQty + ",ChargeOther=" + Modfunction.SQLSafeValue(ChargeOther) + "";
                                     db.Update("tjms1",
                                            str,
                                            " TrxNo='" + strTrxNo + "' ");
 
-                                     str = " CompanyName = " + Modfunction.SQLSafeValue(CompanyName) + "";
+                                    str =  "OfficeInChargeName= " + Modfunction.SQLSafeValue(OfficeInChargeName) + "";
+                                    db.Update("tjms2",
+                                           str,
+                                           " TrxNo='" + strTrxNo + "' ");
+
+                                    str = " CompanyName = " + Modfunction.SQLSafeValue(CompanyName) + "";
                                     db.Update("saco1",
                                            str
                                            );

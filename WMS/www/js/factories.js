@@ -11,6 +11,7 @@ appFactory.factory('TABLE_DB', function () {
             CargoDescription1: 'TEXT',
             CargoDescription2: 'TEXT',
             CargoDescription3: 'TEXT',
+            OfficeInChargeName: 'TEXT',
             BargeName1: 'TEXT',
             BargeName2: 'TEXT',
             BargeName3: 'TEXT',

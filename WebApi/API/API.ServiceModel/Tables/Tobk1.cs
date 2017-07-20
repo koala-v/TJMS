@@ -15,6 +15,7 @@ namespace WebApi.ServiceModel.Tables
         public string CargoDescription1 { get; set; }
         public string CargoDescription2 { get; set; }
         public string CargoDescription3 { get; set; }
+        public string OfficeInChargeName { get; set; }      
         public string BargeName1 { get; set; }
         public string BargeName2 { get; set; }
         public string BargeName3 { get; set; }

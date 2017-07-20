@@ -216,3 +216,12 @@ html {
   color: #FFF;
   line-height: 1.3em;
 }
+.imc-scroll {
+  width: 100%;
+  height: 140px;
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch /*iOS 滚动弹簧效果 */
+}

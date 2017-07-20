@@ -124,7 +124,11 @@ appControllers.controller('GrDetailCtrl', [
         var UpdateTjms2 =function(){
           var Tjms2Filter = "TrxNo='" + $scope.Detail.Tjms2.TrxNo + "' and LineItemNo='" + $scope.Detail.Tjms2.LineItemNo + "' ";
           var objTjms2 = {
-              DateCompleted:$scope.Detail.Tjms2.DateCompleted
+              DateCompleted:$scope.Detail.Tjms2.DateCompleted,
+              OfficeInChargeName:$scope.Detail.Tjms2.OfficeInChargeName,
+              ChargeBerthQty:$scope.Detail.Tjms2.ChargeBerthQty,
+              ChargeLiftingQty:$scope.Detail.Tjms2.ChargeLiftingQty,
+              ChargeOther:$scope.Detail.Tjms2.ChargeOther
           };
           SqlService.Update('Tjms2', objTjms2, Tjms2Filter).then(function (res) {});
         };
