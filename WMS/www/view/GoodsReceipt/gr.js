@@ -155,9 +155,9 @@ appControllers.controller('GrDetailCtrl', [
         };
         var getSignature = function (objTjms2) {
             var objUri = ApiService.Uri(true, '/api/tms/tjms2/attach');
-            objUri.addSearch('Key', objTjms2.TrxNo);
+            objUri.addSearch('Key', objTjms2.JobNo);
             objUri.addSearch('LineItemNo', objTjms2.LineItemNo);
-            objUri.addSearch('TableName', 'Tjms');
+            objUri.addSearch('TableName', 'Tjms1');
             ApiService.Get(objUri, true).then(function success(result) {
                 if (is.not.undefined(result.data.results)) {
                     $scope.signature = result.data.results;
@@ -255,22 +255,43 @@ app.controller('JoblistingConfirmCtrl', ['ENV', '$scope', '$state', '$stateParam
             var objTjms2 = {
                 TempBase64: signature,
             };
-            var arrTjms2 = [];
-            arrTjms2.push($scope.Confirm.Tjms2);
-            var jsonData = {
-                "UpdateAllString": JSON.stringify(arrTjms2)
-            };
-            var objUri = ApiService.Uri(true, '/api/tms/tjms2/update');
-            ApiService.Post(objUri, jsonData, true).then(function success(result) {});
+            // var arrTjms2 = [];
+            // arrTjms2.push($scope.Confirm.Tjms2);
+            // var jsonData = {
+            //     "UpdateAllString": JSON.stringify(arrTjms2)
+            // };
+            // var objUri = ApiService.Uri(true, '/api/tms/tjms2/update');
+            // ApiService.Post(objUri, jsonData, true).then(function success(result) {});
+            if($scope.Confirm.Tjms2.ChargeBerthQty===""){
+              $scope.Confirm.Tjms2.ChargeBerthQty=0;
+            }
+            if($scope.Confirm.Tjms2.ChargeLiftingQty===""){
+              $scope.Confirm.Tjms2.ChargeLiftingQty=0;
+            }
+            var objUriUpdate = ApiService.Uri(true, '/api/tms/tjms2/update');
+            objUriUpdate.addSearch('TrxNo', $scope.Confirm.Tjms2.TrxNo);
+            objUriUpdate.addSearch('LineItemNo', $scope.Confirm.Tjms2.LineItemNo);
+            objUriUpdate.addSearch('SignedByName', $scope.Confirm.Tjms2.SignedByName);
+            objUriUpdate.addSearch('SignedByNric', $scope.Confirm.Tjms2.SignedByNric);
+            objUriUpdate.addSearch('SignedByDesignation', $scope.Confirm.Tjms2.SignedByDesignation);
+            objUriUpdate.addSearch('strDateCompleted', $scope.Confirm.Tjms2.DateCompleted);
+            objUriUpdate.addSearch('ChargeBerthQty', $scope.Confirm.Tjms2.ChargeBerthQty);
+            objUriUpdate.addSearch('ChargeLiftingQty', $scope.Confirm.Tjms2.ChargeLiftingQty);
+            objUriUpdate.addSearch('ChargeOther', $scope.Confirm.Tjms2.ChargeOther);
+           objUriUpdate.addSearch('OfficeInChargeName', $scope.Confirm.Tjms2.OfficeInChargeName);
+            objUriUpdate.addSearch('CompanyName', $scope.Confirm.Tjms2.CompanyName);
+            ApiService.Get(objUriUpdate, false).then(function success(result) {});
+            $ionicLoading.hide();
+
             SqlService.Update('Tjms2', objTjms2, Tjms2Filter).then(function (res) {});
             jsonData = {
                 'Base64': $scope.signature,
-                'FileName': $scope.Confirm.Tjms2.TrxNo + '_' + $scope.Confirm.Tjms2.LineItemNo + '.Png'
+                'FileName': $scope.Confirm.Tjms2.JobNo + '_' + $scope.Confirm.Tjms2.LineItemNo + '.Png'
             };
             if ($scope.signature !== null && is.not.equal($scope.signature, '') && is.not.undefined($scope.signature)) {
                 objUri = ApiService.Uri(true, '/api/tms/upload/img');
-                objUri.addSearch('Key', $scope.Confirm.Tjms2.TrxNo);
-                objUri.addSearch('TableName', 'Tjms');
+                objUri.addSearch('Key', $scope.Confirm.Tjms2.JobNo);
+                objUri.addSearch('TableName', 'Tjms1');
                 ApiService.Post(objUri, jsonData, true).then(function success(result) {});
             }
             PopupService.Info(null, 'Confirm Success', '').then(function (res) {

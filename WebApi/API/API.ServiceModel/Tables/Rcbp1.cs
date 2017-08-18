@@ -13,5 +13,8 @@ namespace WebApi.ServiceModel.Tables
         public string StatusCode { get; set; }
         public string CountryCode { get; set; }
         public string CountryName { get; set; }
+        public string CustomerCode { get; set; }
+
+
     }
 }

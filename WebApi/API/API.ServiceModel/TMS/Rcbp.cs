@@ -29,8 +29,11 @@ namespace WebApi.ServiceModel.TMS
                     {
                         if (!string.IsNullOrEmpty(request.BusinessPartyName))
                         {
+
+                            //string strSQL = "select DISTINCT CustomerCode as BusinessPartyCode ,CustomerName as  BusinessPartyName  from tjms1 where IsNUll(StatusCode,'')<>'DEL' And CustomerCode LIKE '" + request.BusinessPartyName + "%' Order By tjms1.CustomerCode Asc";
+
                             string strSQL = "Select Top 10 *,(Select Top 1 CountryName From Rccy1 Where CountryCode=Rcbp1.CountryCode) AS CountryName From Rcbp1 Where IsNUll(StatusCode,'')<>'DEL' And BusinessPartyName LIKE '" + request.BusinessPartyName + "%' Order By BusinessPartyCode Asc";
-                            Result = db.Select<Rcbp1>(strSQL);
+                          Result = db.Select<Rcbp1>(strSQL);
                         }
 
                     }

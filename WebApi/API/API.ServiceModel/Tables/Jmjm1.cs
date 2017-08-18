@@ -12,6 +12,8 @@ namespace WebApi.ServiceModel.Tables
         public string JobNo { get; set; }
         public string CustomerCode { get; set; }
         public int TrxNo { get; set; }
+        public string BusinessPartyCode { get; set; }
+        public string BusinessPartyName { get; set; }
 
 
     }

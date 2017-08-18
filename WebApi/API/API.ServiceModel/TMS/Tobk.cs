@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace WebApi.ServiceModel.TMS
 {
     [Route("/tms/tjms2", "Get")]  //DriverCode=
-    [Route("/tms/tjms2/update", "Post")] //
+    [Route("/tms/tjms2/update", "Get")] //
     [Route("/tms/tjms2/confirm", "Get")] //update?Key=,Remark=,TableName=
     [Route("/tms/tjms2/PickupTimeUpdate", "Post")] 
     
@@ -30,7 +30,18 @@ namespace WebApi.ServiceModel.TMS
         public string JobNo { get; set; }
         public string DCDescription { get; set; }
         public string ScheduleDateFlag { get; set; }
-      
+        //  tjms start
+        public string SignedByName { get; set; }
+        public string SignedByNric { get; set; }
+        public string SignedByDesignation { get; set; }
+        public string strDateCompleted { get; set; }
+        public string ChargeBerthQty { get; set; }
+        public string ChargeOther { get; set; }
+        public string ChargeLiftingQty { get; set; }
+        public string OfficeInChargeName { get; set; }
+        public string CompanyName { get; set; }
+     
+        // tjms end
     }
     public class Tobk_Logic
     {
@@ -215,72 +226,70 @@ namespace WebApi.ServiceModel.TMS
             {
                 using (var db = DbConnectionFactory.OpenDbConnection())
                 {
-                    if (request.UpdateAllString != null && request.UpdateAllString != "")
-                    {
-                        JArray ja = (JArray)JsonConvert.DeserializeObject(request.UpdateAllString);
-                        if (ja != null)
-                        {
-                            for (int i = 0; i < ja.Count(); i++)
-                            {
-                                int ChargeBerthQty;
-                                int ChargeLiftingQty;
-                                if (ja[i]["TrxNo"] == null || ja[i]["TrxNo"].ToString() == "")
-                                { continue; }
-                                string strTrxNo = ja[i]["TrxNo"].ToString();
-                                string strLineItemNo = ja[i]["LineItemNo"].ToString();
-                                string SignedByName = ja[i]["SignedByName"].ToString();
-                                string SignedByNric = ja[i]["SignedByNric"].ToString();
-                                string SignedByDesignation = ja[i]["SignedByDesignation"].ToString();
-                                string CompanyName = ja[i]["CompanyName"].ToString();
-                                string strDateCompleted = ja[i]["DateCompleted"].ToString();
-                                string OfficeInChargeName = ja[i]["OfficeInChargeName"].ToString();
-                                if (ja[i]["ChargeBerthQty"].ToString() == "")
-                                {
-                                    ChargeBerthQty = 0;
-                                }
-                                else
-                                {
-                                     ChargeBerthQty = int.Parse(ja[i]["ChargeBerthQty"].ToString());
-                                }
+                    //if (request.UpdateAllString != null && request.UpdateAllString != "")
+                    //{
+                    //    JArray ja = (JArray)JsonConvert.DeserializeObject(request.UpdateAllString);
+                    //    if (ja != null)
+                    //    {
+                    //        for (int i = 0; i < ja.Count(); i++)
+                    //        {
+                    //            int ChargeBerthQty;
+                    //            int ChargeLiftingQty;
+                    //            if (ja[i]["TrxNo"] == null || ja[i]["TrxNo"].ToString() == "")
+                    //            { continue; }
+                    //            string strTrxNo = ja[i]["TrxNo"].ToString();
+                    //            string strLineItemNo = ja[i]["LineItemNo"].ToString();
+                    //            string SignedByName = ja[i]["SignedByName"].ToString();
+                    //            string SignedByNric = ja[i]["SignedByNric"].ToString();
+                    //            string SignedByDesignation = ja[i]["SignedByDesignation"].ToString();
+                    //            string CompanyName = ja[i]["CompanyName"].ToString();
+                    //            string strDateCompleted = ja[i]["DateCompleted"].ToString();
+                    //            string OfficeInChargeName = ja[i]["OfficeInChargeName"].ToString();
+                        //        if (request .ChargeBerthQty.ToString() == "")
+                        //        {
+                        //request.ChargeBerthQty = 0;
+                        //        }
+                        //        else
+                        //        {
+                        //request.ChargeBerthQty = int.Parse(ja[i]["ChargeBerthQty"].ToString());
+                        //        }
 
-                                if (ja[i]["ChargeLiftingQty"].ToString() == "")
-                                {
-                                    ChargeLiftingQty = 0;
-                                }
-                                else
-                                {
-                                    ChargeLiftingQty = int.Parse(ja[i]["ChargeLiftingQty"].ToString());
-                                }
+                        //        if (ja[i]["ChargeLiftingQty"].ToString() == "")
+                        //        {
+                        //            ChargeLiftingQty = 0;
+                        //        }
+                        //        else
+                        //        {
+                        //            ChargeLiftingQty = int.Parse(ja[i]["ChargeLiftingQty"].ToString());
+                        //        }
 
-                                string ChargeOther = ja[i]["ChargeOther"].ToString();
+                        //        string ChargeOther = ja[i]["ChargeOther"].ToString();
                                 DateTime dt = DateTime.Now;
-                                if (strDateCompleted != "" && strDateCompleted != null) {
-                                    strDateCompleted = strDateCompleted +" "+ dt.GetDateTimeFormats('t')[0].ToString();
-                                }
+                                //if (strDateCompleted != "" && strDateCompleted != null) {
+                                //    strDateCompleted = strDateCompleted +" "+ dt.GetDateTimeFormats('t')[0].ToString();
+                                //}
                                 string str;
-                                if (strLineItemNo != "0")
+                                if (request.LineItemNo  != "0")
                                 {
 
-                                    str = " SignedByName = " + Modfunction.SQLSafeValue(SignedByName) + ",SignedByNric= " + Modfunction.SQLSafeValue(SignedByNric) + ",SignedByDesignation= " + Modfunction.SQLSafeValue(SignedByDesignation) + ",DateCompleted=" + Modfunction.SQLSafeValue(strDateCompleted) +  ",ChargeBerthQty="+ ChargeBerthQty + ",ChargeLiftingQty="+ ChargeLiftingQty + ",ChargeOther=" + Modfunction.SQLSafeValue(ChargeOther) + "";
+                        str = "AttachmentFlag='Y', SignedByName = " + Modfunction.SQLSafeValue(request.SignedByName) + ",SignedByNric= " + Modfunction.SQLSafeValue(request.SignedByNric) + ",SignedByDesignation= " + Modfunction.SQLSafeValue(request.SignedByDesignation) + ",DateCompleted=" + Modfunction.SQLSafeValue(request.strDateCompleted) +  ",ChargeBerthQty="+ request.ChargeBerthQty + ",ChargeLiftingQty="+ request.ChargeLiftingQty + ",ChargeOther=" + Modfunction.SQLSafeValue(request.ChargeOther) + "";
                                     db.Update("tjms1",
                                            str,
-                                           " TrxNo='" + strTrxNo + "' ");
+                                           " TrxNo='" + request.TrxNo + "' ");
 
-                                    str =  "OfficeInChargeName= " + Modfunction.SQLSafeValue(OfficeInChargeName) + "";
+                                    str =  "OfficeInChargeName= " + Modfunction.SQLSafeValue(request.OfficeInChargeName) + "";
                                     db.Update("tjms2",
                                            str,
-                                           " TrxNo='" + strTrxNo + "' ");
+                                           " TrxNo='" + request.TrxNo + "' ");
 
-                                    str = " CompanyName = " + Modfunction.SQLSafeValue(CompanyName) + "";
+                                    str = " CompanyName = " + Modfunction.SQLSafeValue(request.CompanyName) + "";
                                     db.Update("saco1",
                                            str
                                            );
                                 }
 
-                            }
                             Result = 1;
-                        }
-                    }          
+                           
                 }
             }
             catch { throw; }

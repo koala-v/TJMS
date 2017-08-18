@@ -165,6 +165,7 @@ appControllers.controller( 'LoginCtrl', [
     '$ionicPopup',
     '$timeout',
     'ApiService',
+    'PopupService',
     function(
         $rootScope,
         $scope,
@@ -172,7 +173,9 @@ appControllers.controller( 'LoginCtrl', [
         $stateParams,
         $ionicPopup,
         $timeout,
-        ApiService ) {
+        ApiService,
+        PopupService
+       ) {
         $scope.logininfo = {};
         if ( undefined == $scope.logininfo.strUserName ) {
             $scope.logininfo.strUserName = '';
@@ -220,12 +223,18 @@ appControllers.controller( 'LoginCtrl', [
             objUri.addSearch('UserId',$scope.logininfo.strUserName);
             objUri.addSearch('Password',hex_md5( $scope.logininfo.strPassword ));
             ApiService.Get( objUri, true ).then( function success( result ) {
+              if(result.data.results===1){
                 $rootScope.$broadcast( 'login' );
                 sessionStorage.clear();
                 sessionStorage.setItem( 'UserId', $scope.logininfo.strUserName );
                 $state.go( 'index.main', {}, {
                     reload: true
                 } );
+              }else{
+                PopupService.Alert( popup, 'Please Enter Correct Information' ).then( function () {
+
+                } );
+              }
             } );
         };
     } ] );
