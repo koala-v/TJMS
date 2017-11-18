@@ -3,7 +3,7 @@ var appConfig = angular.module('WMSAPP.config',[]);
 appConfig.constant('ENV', {
     website:      'www.sysfreight.net/app/wms/tjms',
    api:          'www.sysfreight.net/apis/wms/tjms',
-  //  api:        'localhost:2354',
+   // api:        'localhost:2354',
     reset:  {
         website:      'www.sysfreight.net/app/wms/tjms',
         api:          'www.sysfreight.net/apis/wms/tjms',
@@ -29,7 +29,7 @@ appConfig.constant('ENV', {
     updateFile:   'update.json',
     rootPath:     'TJMSPath',
     configFile:   'config.txt',
-    version:      '1.0.1.3',
+    version:      '1.0.1.5',
     parameter: {
         showSerialNo : false
     },

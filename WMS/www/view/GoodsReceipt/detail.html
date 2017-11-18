@@ -1,7 +1,8 @@
 <ion-view title="GRT-Detail">
 	<ion-header-bar class="bar-positive" align-title="center">
 		<button class="button button-icon icon ion-android-arrow-back" ng-click="returnList()"></button>
-		<div class="h1 title">Tjms Detail</div>
+		<div class="h1 title">Tjms Detail {{Detail.Tjms2.JobNo}} </div>
+		<button class="button button-icon icon ion-android-print" ng-click="gotoPrint('1')"></button>
 	</ion-header-bar>
 	<ion-content overflow-scroll="true">
 		<div class="card">
@@ -27,7 +28,7 @@
 				<p><span ng-bind="Detail.Tjms2.CargoDescription" style="white-space: normal;"></span></p>
 			</div>
 			<div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">Officer&nbsp;In&nbsp; Charge &nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<p style="font-weight:bold;">Customer&nbsp;Rep &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; :</p>
 				<!-- <p><span ng-bind="Detail.Tjms2.OfficeInChargeName"></span></p> -->
 				<label class="item item-input">
 					<textarea wrap="hard" cols="48px" ng-model="Detail.Tjms2.OfficeInChargeName" rows="4">
@@ -55,24 +56,88 @@
 				<div>
 					<table border="1px">
 						<tr>
+							<th> Code &nbsp;</th>
+							<th> Vehicle Type &nbsp;</th>
 							<th> Container No &nbsp;</th>
-							<th> Container Type &nbsp;</th>
-							<th> No of Pkg /Cntr &nbsp;</th>
 							<th> Description &nbsp;</th>
-							<th> Vehicle &nbsp;</th>
-							<th> Start Time &nbsp;</th>
+							<th> Chem/Plt Wt &nbsp;</th>
+							<th> Chg Wt&nbsp;</th>
+							<th> Chg Wt (Rnd Up) &nbsp;</th>
+							<th> Vehicle No &nbsp;</th>
+							<th>Start Time&nbsp;</th>
 							<th> End Time &nbsp;</th>
 						</tr>
-						<tr>
-							<td> <span ng-bind="Detail.Tjms2.ContainerNo1"></span> &nbsp;</td>
-							<td> <span ng-bind="Detail.Tjms2.ContainerType1"></span> &nbsp;</td>
-							<td> <span ng-bind="Detail.Tjms2.Pcs1"></span> &nbsp;</td>
-							<td> <span ng-bind="Detail.Tjms2.CargoDescription1"></span> &nbsp;</td>
-							<td> <span ng-bind="Detail.Tjms2.VehicleNo1"></span> &nbsp;</td>
-							<td> <span ng-bind="Detail.Tjms2.StartDateTime"></span> &nbsp;</td>
-							<td> <span ng-bind="Detail.Tjms2.EndDateTime"></span></td>
+						<tr ng-repeat="tjms5 in Detail.tjms5">
+							<td>
+								<!-- <label class="item item-input">
+									<input type="text" id="" ng-model="tjms5.EquipmentType" style="">
+								</label> -->
+
+								<ui-select theme="bootstrap" ng-model="EquipmentType.selected" reset-search-input="true" on-select="showTote1(EquipmentType.selected,tjms5.LineItemNo)">
+									<ui-select-match allow-clear="true" placeholder="Enter to search..." style="overflow:hidden;">{{$select.selected.EquipmentType}}</ui-select-match>
+									<ui-select-choices repeat="EquipmentType in EquipmentTypes track by $index" refresh="refreshEquipmentType($select.search)" refresh-delay="0" position="down">
+										<div ng-bind-html="EquipmentType.EquipmentType | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+
+							</td>
+
+							<td>
+								<label class="item item-input">
+									<input type="text" id="" ng-model="tjms5.EquipmentTypeDescription" style="">
+								</label>
+							</td>
+
+							<td>
+								<label class="item item-input">
+									<input type="text" id="" ng-model="tjms5.ContainerNo" style="">
+								</label>
+							</td>
+
+							<td>
+								<label class="item item-input">
+									<input type="text" id="" ng-model="tjms5.CargoDescription" style="">
+								</label>
+							</td>
+
+							<td>
+								<label class="item item-input">
+									<input type="number" id="" ng-model="tjms5.Volume" data-ng-disabled="tjms5.disabled" style="">
+								</label>
+							</td>
+
+							<td>
+								<label class="item item-input">
+									<input type="number" id="" ng-model="tjms5.ChargeWeight" data-ng-disabled="tjms5.disabled" style="">
+								</label>
+							</td>
+
+							<td>
+								<label class="item item-input">
+									<input type="number" id="" ng-model="tjms5.ChgWtRoundUp" style="">
+								</label>
+							</td>
+
+							<td>
+								<label class="item item-input">
+									<input type="text" id="" ng-model="tjms5.VehicleNo" style="">
+								</label>
+							</td>
+
+							<td>
+								<label class="item item-input">
+									<input type="text" disabled="disabled" id="" ng-model="tjms5.StartDateTime" style="">
+								</label>
+							</td>
+
+							<td>
+								<label class="item item-input">
+									<input type="text" disabled="disabled" id="" ng-model="tjms5.EndDateTime" style="">
+								</label>
+							</td>
+
 						</tr>
-						<tr>
+						<!-- <tr>
 							<td> <span ng-bind="Detail.Tjms2.ContainerNo2"></span> &nbsp;</td>
 							<td> <span ng-bind="Detail.Tjms2.ContainerType2"></span> &nbsp;</td>
 							<td> <span ng-bind="Detail.Tjms2.Pcs2"></span> &nbsp;</td>
@@ -89,7 +154,7 @@
 							<td> <span ng-bind="Detail.Tjms2.VehicleNo3"></span> &nbsp;</td>
 							<td> <span ng-bind="Detail.Tjms2.StartDateTime"></span> &nbsp;</td>
 							<td> <span ng-bind="Detail.Tjms2.EndDateTime"></span></td>
-						</tr>
+						</tr> -->
 					</table>
 				</div>
 			</div>
@@ -177,6 +242,12 @@
 				<label class="item item-input">
 					<!-- <p><span ng-bind="Detail.Tjms2.ChargeLiftingQty"></span></p> -->
 					<input type="number" id="" ng-model="Detail.Tjms2.ChargeLiftingQty" style="padding-right:1em;padding-top: 0px;">
+				</label>
+			</div>
+			<div class="item" style="padding: 0px">
+				<p style="font-weight:bold;">Signal Man&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+				<label class="item item-input">
+					<input type="number" id="" ng-model="Detail.Tjms2.SignalManQty" style="padding-right:1em;padding-top: 0px;">
 				</label>
 			</div>
 			<div class="item" style="padding: 0px">

@@ -251,6 +251,12 @@ app.config( [ '$httpProvider', '$stateProvider', '$urlRouterProvider', '$ionicCo
               templateUrl: 'view/GoodsReceipt/confirm.html',
               controller: 'JoblistingConfirmCtrl'
           })
+          .state('grPrint', {
+            url: '/gr/print/:TrxNo/:Flag',
+            cache: 'false',
+            templateUrl: 'view/GoodsReceipt/print.html',
+            controller: 'JoblistingPrintCtrl'
+        })
             .state( 'vginList', {
                 url: '/vgin/list',
                 templateUrl: 'view/VerifyGIN/list.html',

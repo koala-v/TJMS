@@ -41,7 +41,9 @@ namespace WebApi.ServiceModel.Tables
         public string SignedByNric { get; set; }
         public string SignedByDesignation { get; set; }
         public string CompanyName { get; set; }
+        public DateTime CustomerSignOffDateTime { get; set; }
+        public   int SignalManQty { get; set; }
 
 
-    }
+}
 }

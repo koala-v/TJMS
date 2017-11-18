@@ -3,7 +3,8 @@
         <div class="buttons">
             <button class="button button-icon button-clear ion-android-arrow-back" ng-click="returnDetail()"></button>
         </div>
-        <h1 class="title">Tjms Confirmation </h1>
+        <h1 class="title">Tjms Confirm {{Confirm.Tjms2.JobNo}}</h1>
+        <button class="button button-icon icon ion-android-print" ng-click="gotoPrint('1')"></button>
     </ion-header-bar>
     <ion-content>
         <div style="height: 1px;"></div>
@@ -51,7 +52,7 @@
             <button class="button icon ion-android-done" ng-click="confirm()" ">
                 &nbsp;OK
             </button>
-            <button class="button icon ion-arrow-return-right" ng-click="returnDetail()">
+            <button class="button icon ion-arrow-return-right " ng-click="returnDetail() ">
                 &nbsp;Cancel
             </button>
         </div>

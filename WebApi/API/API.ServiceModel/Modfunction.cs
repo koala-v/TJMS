@@ -30,5 +30,17 @@ namespace WebApi.ServiceModel
             else
                 return strValue;
         }
+        public static int ReturnZero(string strValue)
+        {
+            if (strValue == "")
+            {
+                { return 0; }
+            }
+            else
+            {
+                return int.Parse(strValue);
+            }
+        }
+
     }
 }

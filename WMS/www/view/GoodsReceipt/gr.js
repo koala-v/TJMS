@@ -76,7 +76,7 @@ appControllers.controller('GrDetailCtrl', [
     '$cordovaKeyboard',
     '$cordovaToast',
     '$cordovaBarcodeScanner',
-   'ionicDatePicker',
+    'ionicDatePicker',
     'SqlService',
     'ApiService',
     'PopupService',
@@ -94,11 +94,12 @@ appControllers.controller('GrDetailCtrl', [
         $cordovaKeyboard,
         $cordovaToast,
         $cordovaBarcodeScanner,
-       ionicDatePicker,
+        ionicDatePicker,
         SqlService,
         ApiService,
         PopupService) {
         var popup = null;
+        var dataResults = new Array();
         var hmImgr2 = new HashMap();
         var hmImsn1 = new HashMap();
         $scope.Detail = {
@@ -107,6 +108,8 @@ appControllers.controller('GrDetailCtrl', [
                 CargoDescription: '',
                 Vessel: '',
             },
+            tjms5: {},
+            tote1: {},
             Tjms2s: {
 
             },
@@ -121,34 +124,89 @@ appControllers.controller('GrDetailCtrl', [
             // }
         };
 
-        var UpdateTjms2 =function(){
-          var Tjms2Filter = "TrxNo='" + $scope.Detail.Tjms2.TrxNo + "' and LineItemNo='" + $scope.Detail.Tjms2.LineItemNo + "' ";
-          var objTjms2 = {
-              DateCompleted:$scope.Detail.Tjms2.DateCompleted,
-              OfficeInChargeName:$scope.Detail.Tjms2.OfficeInChargeName,
-              ChargeBerthQty:$scope.Detail.Tjms2.ChargeBerthQty,
-              ChargeLiftingQty:$scope.Detail.Tjms2.ChargeLiftingQty,
-              ChargeOther:$scope.Detail.Tjms2.ChargeOther
-          };
-          SqlService.Update('Tjms2', objTjms2, Tjms2Filter).then(function (res) {});
+        var UpdateTjms2 = function () {
+            var Tjms2Filter = "TrxNo='" + $scope.Detail.Tjms2.TrxNo + "' and LineItemNo='" + $scope.Detail.Tjms2.LineItemNo + "' ";
+            var objTjms2 = {
+                DateCompleted: $scope.Detail.Tjms2.DateCompleted,
+                OfficeInChargeName: $scope.Detail.Tjms2.OfficeInChargeName,
+                ChargeBerthQty: $scope.Detail.Tjms2.ChargeBerthQty,
+                ChargeLiftingQty: $scope.Detail.Tjms2.ChargeLiftingQty,
+                ChargeOther: $scope.Detail.Tjms2.ChargeOther,
+                SignalManQty: $scope.Detail.Tjms2.SignalManQty
+            };
+            SqlService.Update('Tjms2', objTjms2, Tjms2Filter).then(function (res) {});
         };
-            $scope.OnDatePicker = function () {
+        $scope.OnDatePicker = function () {
             var ipObj1 = {
                 callback: function (val) { //Mandatory
                     //  console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-                     $scope.Detail.Tjms2.DateCompleted = moment(new Date(val)).format('YYYY-MM-DD');
+                    $scope.Detail.Tjms2.DateCompleted = moment(new Date(val)).format('YYYY-MM-DD');
 
                 },
                 to: new Date(),
             };
-           ionicDatePicker.openDatePicker(ipObj1);
+            ionicDatePicker.openDatePicker(ipObj1);
         };
 
+        $scope.showTote1 = function (EquipmentType, LineItemNo) {
+            if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
+                var objUri = ApiService.Uri(true, '/api/tms/toet1');
+                objUri.addSearch('EquipmentType', EquipmentType.EquipmentType);
+                ApiService.Get(objUri, false).then(function success(result) {
+                    $scope.Detail.tote1 = result.data.results;
+                    if ($scope.Detail.tote1.length > 0) {
+                        $scope.Detail.tjms5[LineItemNo - 1].EquipmentTypeDescription = $scope.Detail.tote1[0].EquipmentTypeDescription;
+                        $scope.Detail.tjms5[LineItemNo - 1].Volume = $scope.Detail.tote1[0].Volume;
+                        $scope.Detail.tjms5[LineItemNo - 1].ChargeWeight = $scope.Detail.tote1[0].ChgWt;
+                        if ($scope.Detail.tote1[0].EditFlag === 'Y') {
+                            $scope.Detail.tjms5[LineItemNo - 1].disabled = false;
+                        } else {
+                            $scope.Detail.tjms5[LineItemNo - 1].disabled = true;
+                        }
+                    }
+
+                });
+            }
+        };
+        $scope.refreshEquipmentType = function (EquipmentType) {
+            if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
+                var objUri = ApiService.Uri(true, '/api/tms/toet1/EquipmentType');
+                objUri.addSearch('EquipmentType', EquipmentType);
+                ApiService.Get(objUri, false).then(function success(result) {
+                    $scope.EquipmentTypes = result.data.results;
+                });
+            }
+        };
+        var updateTjms5 =function (){
+           if($scope.Detail.tjms5.length>0){
+             for (var i =0;i<$scope.Detail.tjms5.length;i++){
+               var arrtjms5 = [];
+             arrtjms5.push($scope.Detail.tjms5[i]);
+             var jsonData = {
+                 "UpdateAllString": JSON.stringify(arrtjms5)
+             };
+             var objUri = ApiService.Uri(true, '/api/tms/tjms5/update');
+             ApiService.Post(objUri, jsonData, true).then(function success(result) {
+             });
+             }
+
+           }
+        };
         $scope.gotoConfirm = function () {
-          UpdateTjms2();
+            UpdateTjms2();
+            updateTjms5();
             $state.go('jobListingConfirm', {
                 'TrxNo': $scope.Detail.TrxNo,
 
+            }, {
+                reload: true
+            });
+        };
+        $scope.gotoPrint = function () {
+
+            $state.go('grPrint', {
+                'TrxNo': $scope.Detail.TrxNo,
+                'Flag': 'N',
             }, {
                 reload: true
             });
@@ -169,6 +227,40 @@ appControllers.controller('GrDetailCtrl', [
                 }
             });
         };
+        var getjobs = function (obj) {
+            var jobs = {
+                TrxNo: obj.TrxNo,
+                LineItemNo: obj.LineItemNo,
+                disabled: false,
+                EquipmentType: obj.EquipmentType,
+                EquipmentTypeDescription: obj.EquipmentTypeDescription,
+                ContainerNo: obj.ContainerNo,
+                CargoDescription: obj.CargoDescription,
+                Volume: obj.Volume,
+                ChargeWeight: obj.ChargeWeight,
+                ChgWtRoundUp: obj.ChgWtRoundUp,
+                VehicleNo: obj.VehicleNo,
+                StartDateTime: checkDateTimeisEmpty(obj.StartDateTime),
+                EndDateTime: checkDateTimeisEmpty(obj.EndDateTime)
+            };
+            return jobs;
+        };
+        var getTjms5 = function (TrxNo) {
+            var objUri = ApiService.Uri(true, '/api/tms/tjms5');
+            objUri.addSearch('TrxNo', TrxNo);
+            ApiService.Get(objUri, true).then(function success(result) {
+                var results = result.data.results;
+                if (results.length > 0) {
+                    // $scope.Detail.tjms5 = results;
+                    for (var i = 0; i < results.length; i++) {
+                        var jobs = getjobs(results[i]);
+                        $scope.refreshEquipmentType(results[i].EquipmentType);
+                        dataResults = dataResults.concat(jobs);
+                        $scope.Detail.tjms5 = dataResults;
+                    }
+                }
+            });
+        };
 
         var GetTjms2s = function (TrxNo) {
             var objUri = ApiService.Uri(true, '/api/tms/tjms2');
@@ -186,6 +278,7 @@ appControllers.controller('GrDetailCtrl', [
                         $scope.Detail.Tjms2.EndDateTime = checkDateTimeisEmpty($scope.Detail.Tjms2.EndDateTime);
                         $scope.Detail.Tjms2.DateCompleted = checkDateCompleted($scope.Detail.Tjms2.DateCompleted);
                         getSignature(objImgr2);
+                        getTjms5(TrxNo);
                     }
                 });
 
@@ -201,6 +294,11 @@ app.controller('JoblistingConfirmCtrl', ['ENV', '$scope', '$state', '$stateParam
             signaturePad = new SignaturePad(canvas),
             strEemptyBase64 = '';
         $scope.signature = null;
+        $scope.Error = {
+            Err1: '',
+            Err2: '',
+            Err3: ''
+        };
         $scope.Confirm = {
             Tjms2: {
                 TrxNo: $stateParams.TrxNo,
@@ -245,60 +343,122 @@ app.controller('JoblistingConfirmCtrl', ['ENV', '$scope', '$state', '$stateParam
                 $scope.signature = sigImg;
             }
         };
-        $scope.confirm = function () {
-            $scope.saveCanvas();
-            var signature = '';
-            if (is.not.null($scope.signature)) {
-                signature = $scope.signature.split(',')[1];
-            }
-            var Tjms2Filter = "TrxNo='" + $scope.Confirm.Tjms2.TrxNo + "' and LineItemNo='" + $scope.Confirm.Tjms2.LineItemNo + "' "; // not record
-            var objTjms2 = {
-                TempBase64: signature,
-            };
-            // var arrTjms2 = [];
-            // arrTjms2.push($scope.Confirm.Tjms2);
-            // var jsonData = {
-            //     "UpdateAllString": JSON.stringify(arrTjms2)
-            // };
-            // var objUri = ApiService.Uri(true, '/api/tms/tjms2/update');
-            // ApiService.Post(objUri, jsonData, true).then(function success(result) {});
-            if($scope.Confirm.Tjms2.ChargeBerthQty===""){
-              $scope.Confirm.Tjms2.ChargeBerthQty=0;
-            }
-            if($scope.Confirm.Tjms2.ChargeLiftingQty===""){
-              $scope.Confirm.Tjms2.ChargeLiftingQty=0;
-            }
-            var objUriUpdate = ApiService.Uri(true, '/api/tms/tjms2/update');
-            objUriUpdate.addSearch('TrxNo', $scope.Confirm.Tjms2.TrxNo);
-            objUriUpdate.addSearch('LineItemNo', $scope.Confirm.Tjms2.LineItemNo);
-            objUriUpdate.addSearch('SignedByName', $scope.Confirm.Tjms2.SignedByName);
-            objUriUpdate.addSearch('SignedByNric', $scope.Confirm.Tjms2.SignedByNric);
-            objUriUpdate.addSearch('SignedByDesignation', $scope.Confirm.Tjms2.SignedByDesignation);
-            objUriUpdate.addSearch('strDateCompleted', $scope.Confirm.Tjms2.DateCompleted);
-            objUriUpdate.addSearch('ChargeBerthQty', $scope.Confirm.Tjms2.ChargeBerthQty);
-            objUriUpdate.addSearch('ChargeLiftingQty', $scope.Confirm.Tjms2.ChargeLiftingQty);
-            objUriUpdate.addSearch('ChargeOther', $scope.Confirm.Tjms2.ChargeOther);
-           objUriUpdate.addSearch('OfficeInChargeName', $scope.Confirm.Tjms2.OfficeInChargeName);
-            objUriUpdate.addSearch('CompanyName', $scope.Confirm.Tjms2.CompanyName);
-            ApiService.Get(objUriUpdate, false).then(function success(result) {});
-            $ionicLoading.hide();
 
-            SqlService.Update('Tjms2', objTjms2, Tjms2Filter).then(function (res) {});
-            jsonData = {
-                'Base64': $scope.signature,
-                'FileName': $scope.Confirm.Tjms2.JobNo + '_' + $scope.Confirm.Tjms2.LineItemNo + '.Png'
-            };
-            if ($scope.signature !== null && is.not.equal($scope.signature, '') && is.not.undefined($scope.signature)) {
-                objUri = ApiService.Uri(true, '/api/tms/upload/img');
-                objUri.addSearch('Key', $scope.Confirm.Tjms2.JobNo);
-                objUri.addSearch('TableName', 'Tjms1');
-                ApiService.Post(objUri, jsonData, true).then(function success(result) {});
+        var showError = function () {
+            if ($scope.Confirm.Tjms2.SignedByName.length <= 0) {
+                $scope.Error.Err1 = "Name is not empty,";
+            } else {
+                $scope.Error.Err1 = "";
             }
-            PopupService.Info(null, 'Confirm Success', '').then(function (res) {
-                $scope.returnList();
+            if ($scope.Confirm.Tjms2.SignedByNric.length <= 0) {
+                $scope.Error.Err2 = "Nric is not empty ,";
+            } else {
+                $scope.Error.Err2 = "";
+            }
+            if ($scope.Confirm.Tjms2.SignedByDesignation.length <= 0) {
+                $scope.Error.Err3 = "Designation is not empty ";
+            } else {
+                $scope.Error.Err3 = "";
+            }
+        };
+
+        $scope.gotoPrint = function () {
+
+            $state.go('grPrint', {
+                'TrxNo': '1',
+                'Flag': 'Y',
+            }, {
+                reload: true
             });
+        };
+        $scope.confirm = function () {
+            showError();
+            if ($scope.Error.Err1 === "" && $scope.Error.Err2 === "" && $scope.Error.Err3 === "") {
+                $scope.saveCanvas();
+                var signature = '';
+                if (is.not.null($scope.signature)) {
+                    signature = $scope.signature.split(',')[1];
+                }
+                var Tjms2Filter = "TrxNo='" + $scope.Confirm.Tjms2.TrxNo + "' and LineItemNo='" + $scope.Confirm.Tjms2.LineItemNo + "' "; // not record
+                var objTjms2 = {
+                    TempBase64: signature,
+                };
+                // var arrTjms2 = [];
+                // arrTjms2.push($scope.Confirm.Tjms2);
+                // var jsonData = {
+                //     "UpdateAllString": JSON.stringify(arrTjms2)
+                // };
+                // var objUri = ApiService.Uri(true, '/api/tms/tjms2/update');
+                // ApiService.Post(objUri, jsonData, true).then(function success(result) {});
+                if ($scope.Confirm.Tjms2.ChargeBerthQty === "") {
+                    $scope.Confirm.Tjms2.ChargeBerthQty = 0;
+                }
+                if ($scope.Confirm.Tjms2.ChargeLiftingQty === "") {
+                    $scope.Confirm.Tjms2.ChargeLiftingQty = 0;
+                }
+                if ($scope.Confirm.Tjms2.SignalManQty === "") {
+                    $scope.Confirm.Tjms2.SignalManQty = 0;
+                }
+                var objUriUpdate = ApiService.Uri(true, '/api/tms/tjms2/update');
+                objUriUpdate.addSearch('TrxNo', $scope.Confirm.Tjms2.TrxNo);
+                objUriUpdate.addSearch('LineItemNo', $scope.Confirm.Tjms2.LineItemNo);
+                objUriUpdate.addSearch('SignedByName', $scope.Confirm.Tjms2.SignedByName);
+                objUriUpdate.addSearch('SignedByNric', $scope.Confirm.Tjms2.SignedByNric);
+                objUriUpdate.addSearch('SignedByDesignation', $scope.Confirm.Tjms2.SignedByDesignation);
+                objUriUpdate.addSearch('strDateCompleted', $scope.Confirm.Tjms2.DateCompleted);
+                objUriUpdate.addSearch('ChargeBerthQty', $scope.Confirm.Tjms2.ChargeBerthQty);
+                objUriUpdate.addSearch('ChargeLiftingQty', $scope.Confirm.Tjms2.ChargeLiftingQty);
+                objUriUpdate.addSearch('ChargeOther', $scope.Confirm.Tjms2.ChargeOther);
+                objUriUpdate.addSearch('OfficeInChargeName', $scope.Confirm.Tjms2.OfficeInChargeName);
+                objUriUpdate.addSearch('CompanyName', $scope.Confirm.Tjms2.CompanyName);
+                objUriUpdate.addSearch('SignalManQty', $scope.Confirm.Tjms2.SignalManQty);
+                ApiService.Get(objUriUpdate, false).then(function success(result) {});
+                $ionicLoading.hide();
+
+                SqlService.Update('Tjms2', objTjms2, Tjms2Filter).then(function (res) {});
+                jsonData = {
+                    'Base64': $scope.signature,
+                    'FileName': $scope.Confirm.Tjms2.JobNo + '_' + $scope.Confirm.Tjms2.LineItemNo + '.Png'
+                };
+                if ($scope.signature !== null && is.not.equal($scope.signature, '') && is.not.undefined($scope.signature)) {
+                    objUri = ApiService.Uri(true, '/api/tms/upload/img');
+                    objUri.addSearch('Key', $scope.Confirm.Tjms2.JobNo);
+                    objUri.addSearch('TableName', 'Tjms1');
+                    ApiService.Post(objUri, jsonData, true).then(function success(result) {});
+                }
+                PopupService.Info(null, 'Confirm Success', '').then(function (res) {
+                    $scope.returnList();
+                });
+            } else {
+                PopupService.Info(null, $scope.Error.Err1 + $scope.Error.Err2 + $scope.Error.Err3, '').then(function (res) {
+
+                });
+            }
         };
         resizeCanvas();
         strEemptyBase64 = signaturePad.toDataURL();
+    }
+]);
+
+app.controller('JoblistingPrintCtrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiService', '$ionicPopup', '$ionicPlatform', '$cordovaSQLite', '$cordovaNetwork', '$ionicLoading', 'SqlService', 'PopupService',
+    function (ENV, $scope, $state, $stateParams, ApiService, $ionicPopup, $ionicPlatform, $cordovaSQLite, $cordovaNetwork, $ionicLoading, SqlService, PopupService) {
+        $scope.Flag = $stateParams.Flag;
+        $scope.returnDetail = function () {
+            if ($scope.Flag === 'N') {
+                $state.go('grDetail', {
+                    'TrxNo': '1',
+                }, {
+                    reload: true
+                });
+            } else {
+                $state.go('jobListingConfirm', {
+                    'TrxNo': '1',
+                }, {
+                    reload: true
+                });
+            }
+
+        };
+
     }
 ]);

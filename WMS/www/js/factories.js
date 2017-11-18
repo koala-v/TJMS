@@ -38,6 +38,8 @@ appFactory.factory('TABLE_DB', function () {
             SignedByDesignation: 'TEXT',
             CompanyName: 'TEXT',
             TempBase64:'TEXT',
+            CustomerSignOffDateTime: 'TEXT',
+            SignalManQty:'INT',
         },
     };
     return TABLE_DB;

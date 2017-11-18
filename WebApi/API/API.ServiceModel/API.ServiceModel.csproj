@@ -85,12 +85,14 @@
     <Compile Include="Auth.cs" />
     <Compile Include="CommonResponse.cs" />
     <Compile Include="ConfigInterface.cs" />
+    <Compile Include="Tables\Tjms5.cs" />
     <Compile Include="Tables\Tobk1.cs" />
     <Compile Include="Tables\Jmjm1.cs" />
     <Compile Include="Tables\Jmjm3.cs" />
     <Compile Include="Tables\Rcbp1.cs" />
     <Compile Include="Tables\Saco1.cs" />
     <Compile Include="Tables\Todr1_Rcbp1.cs" />
+    <Compile Include="Tables\Toet1.cs" />
     <Compile Include="Tables\View_Attach.cs" />
     <Compile Include="TMS\Tobk.cs" />
     <Compile Include="TMS\DownLoadImg.cs" />

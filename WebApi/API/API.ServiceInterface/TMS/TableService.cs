@@ -30,6 +30,23 @@ namespace WebApi.ServiceInterface.TMS
                 {
                     ecr.data.results = Tobk_Logic.Get_tjms2_List(request);
                 }
+                else if (uri.IndexOf("/tms/tjms5/update") > 0)
+                {
+                    ecr.data.results = Tobk_Logic.UpdateAll_tjms5(request);
+                }
+                else if (uri.IndexOf("/tms/tjms5") > 0)
+                {
+                    ecr.data.results = Tobk_Logic.Get_tjms5_List(request);
+                }
+                else if (uri.IndexOf("/tms/toet1/EquipmentType") > 0)
+                {
+                    ecr.data.results = Tobk_Logic.Get_EquipmentType(request);
+                }
+              
+                else if (uri.IndexOf("/tms/toet1") > 0)
+                {
+                    ecr.data.results = Tobk_Logic.list_toet1(request);
+                }
                 ecr.meta.code = 200;
                 ecr.meta.message = "OK";
             }
