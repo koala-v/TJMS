@@ -39,19 +39,27 @@
 				<p style="font-weight:bold;">Vessel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
 				<p><span ng-bind="Detail.Tjms2.Vessel" style="white-space: normal;"></span></p>
 			</div>
-			<div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</p>
-			</div>
-			<div class="col col-60">
+			<!-- <div class="item" style="padding: 0px"> -->
+				<div class="row">
+
+					<div class="col" style="padding:0px;">
+			                            <label class="item item-input">
+  <span class="input-label" style="padding-top:2px; padding-bottom: 2px;font-weight:bold;">Date : </span>
 				<button class="button button-light" id="id_DateCompleted" ng-click="OnDatePicker()">
 					<i class="icon ion-calendar"></i>&nbsp;&nbsp;
 					<span ng-bind="Detail.Tjms2.DateCompleted"></span>&nbsp;
 					<i class="icon ion-android-arrow-dropdown"></i>
 				</button>
+				      </label>
 			</div>
-
+		</div>
+	<!-- </div> -->
 			<!-- Container List==================== start -->
-
+			<div class="button-bar">
+	                    <button class="button icon ion-plus-round button-positive" ng-click="gotoTjms5()">
+	                        Add Tjms5
+	                    </button>
+	                </div>
 			<div class="imc-scroll">
 				<div>
 					<table border="1px">
@@ -135,7 +143,11 @@
 									<input type="text" disabled="disabled" id="" ng-model="tjms5.EndDateTime" style="">
 								</label>
 							</td>
-
+							<td>
+								<label class="item item-input">
+								    <button class="button button-clear button-positive button-small" ng-click=""><i class="icon ion-android-close"></i></button>
+								</label>
+							</td>
 						</tr>
 						<!-- <tr>
 							<td> <span ng-bind="Detail.Tjms2.ContainerNo2"></span> &nbsp;</td>
@@ -231,29 +243,33 @@
 			</div> -->
 			<!-- Container List==================== end -->
 			<div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">Berthing/UnBerthing:</p>
+				<!-- <p style="font-weight:bold;"></p> -->
 				<!-- <p><span ng-bind="Detail.Tjms2.ChargeBerthQty"></span></p> -->
 				<label class="item item-input">
+					<span style="font-weight:bold;">Berthing/UnBerthing:&nbsp;&nbsp;</span>
 					<input type="number" id="" ng-model="Detail.Tjms2.ChargeBerthQty" style="padding-right:1em;padding-top: 0px; ">
 				</label>
 			</div>
 			<div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">Lifting Supervisor&nbsp;&nbsp;&nbsp;&nbsp; :</p>
+				<!-- <p style="font-weight:bold;">Lifting Supervisor&nbsp;&nbsp;&nbsp;&nbsp; :</p> -->
 				<label class="item item-input">
+							<span style="font-weight:bold;">Lifting Supervisor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</span>
 					<!-- <p><span ng-bind="Detail.Tjms2.ChargeLiftingQty"></span></p> -->
 					<input type="number" id="" ng-model="Detail.Tjms2.ChargeLiftingQty" style="padding-right:1em;padding-top: 0px;">
 				</label>
 			</div>
 			<div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">Signal Man&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+				<!-- <p style="font-weight:bold;">Signal Man&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p> -->
 				<label class="item item-input">
+						<span style="font-weight:bold;">Signal Man&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</span>
 					<input type="number" id="" ng-model="Detail.Tjms2.SignalManQty" style="padding-right:1em;padding-top: 0px;">
 				</label>
 			</div>
 			<div class="item" style="padding: 0px">
-				<p style="font-weight:bold;">Others &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
-				<!-- <p><span ng-bind="Detail.Tjms2.ChargeOther" style="white-space: normal;"></span></p> -->
+
+					<span style="font-weight:bold;">&nbsp;&nbsp;&nbsp;&nbsp;Others &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
 				<label class="item item-input">
+
 					<textarea wrap="hard" cols="48px" ng-model="Detail.Tjms2.ChargeOther" rows="4">
 					</textarea>
 				</label>

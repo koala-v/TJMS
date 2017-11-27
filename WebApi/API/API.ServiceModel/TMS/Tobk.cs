@@ -18,7 +18,7 @@ namespace WebApi.ServiceModel.TMS
     [Route("/tms/toet1/EquipmentType", "Get")]
     [Route("/tms/toet1", "Get")]
     [Route("/tms/tjms5/update", "Post")]
-
+    [Route("/tms/tjms5/insert", "Post")]
 
     public class Tobk : IReturn<CommonResponse>
     {
@@ -207,6 +207,96 @@ namespace WebApi.ServiceModel.TMS
             catch { throw; }
             return Result;
 
+        }
+
+
+        public int insert_tjms5(Tobk request)
+        {
+
+            int Result = -1;
+            try
+            {
+                using (var db = DbConnectionFactory.OpenDbConnection())
+                {
+                    if (request.UpdateAllString != null && request.UpdateAllString != "")
+                    {
+                        JArray ja = (JArray)JsonConvert.DeserializeObject(request.UpdateAllString);
+                        if (ja != null)
+                        {
+                            for (int i = 0; i < ja.Count(); i++)
+                            {
+
+                                if (ja[i]["TrxNo"] == null || ja[i]["TrxNo"].ToString() == "")
+                                {
+                                    continue;
+                                }
+                                int TrxNo = Modfunction.ReturnZero(ja[i]["TrxNo"].ToString());
+                                string EquipmentType = Modfunction.CheckNull(ja[i]["EquipmentType"]);
+                                string EquipmentTypeDescription = Modfunction.CheckNull(ja[i]["EquipmentTypeDescription"]);
+                                string ContainerNo = Modfunction.CheckNull(ja[i]["ContainerNo"]);
+                                string CargoDescription = Modfunction.CheckNull(ja[i]["CargoDescription"]);
+                                int Volume = Modfunction.ReturnZero(ja[i]["Volume"].ToString());
+                                int ChargeWeight = Modfunction.ReturnZero(ja[i]["ChargeWeight"].ToString());
+                                int ChgWtRoundUp = Modfunction.ReturnZero(Modfunction.CheckNull(ja[i]["ChgWtRoundUp"]));                  
+                                string VehicleNo = Modfunction.CheckNull(ja[i]["VehicleNo"]);
+                                string startDateTime = "select  Top 1 ISNULL(StartDateTime,'NULL') AS StartDateTime  from tjms4 where TrxNo=" + TrxNo + "";
+                                string endDateTime = "select  Top 1  ISNULL(EndDateTime,'NULL') AS EndDateTime  from tjms4 where TrxNo=" + TrxNo + "";
+                                string strSql = "";
+
+
+
+                                int intMaxLineItemNo = 1;
+                                List<Tjms5> list1 = db.Select<Tjms5>("Select Max(LineItemNo) LineItemNo from Tjms5 Where TrxNo = " + TrxNo);
+                                if (list1 != null)
+                                {
+                                    if (list1[0].LineItemNo > 0)
+                                        intMaxLineItemNo = list1[0].LineItemNo + 1;
+                                }
+
+
+                                if (intMaxLineItemNo != 0)
+                                {
+
+                                    strSql = "insert into tjms5 (" +
+                                        " LineItemNo ," +
+                                        " EquipmentType ," +
+                                        " EquipmentTypeDescription  ," +
+                                        " ContainerNo ," +
+                                        " CargoDescription  ," +
+                                        " Volume ," +
+                                        " ChargeWeight ," +
+                                        " ChgWtRoundUp ," +
+                                        " VehicleNo  ," +
+                                       " StartDateTime  ," +
+                                        " EndDateTime  " +
+                                        "  )" +
+                                              "values( " +
+                                        intMaxLineItemNo + " , " +
+                                        EquipmentType + " , " +
+                                        EquipmentTypeDescription + " , " +
+                                        ContainerNo + " , " +
+                                        CargoDescription + " , " +
+                                        Volume + " , " +
+                                        ChargeWeight + " , " +
+                                        ChgWtRoundUp + " , " +
+                                        VehicleNo + " , " +
+                                        startDateTime + " , " +
+                                        endDateTime + "" +
+                                            ") ";
+                                    db.ExecuteSql(strSql);
+                                
+
+                                }
+
+                            }
+                        }
+                        Result = 1;
+
+                    }
+                }
+            }
+            catch { throw; }
+            return Result;
         }
 
         public int UpdateAll_tjms5(Tobk request)

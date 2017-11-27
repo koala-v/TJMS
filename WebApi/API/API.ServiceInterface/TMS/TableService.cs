@@ -30,9 +30,14 @@ namespace WebApi.ServiceInterface.TMS
                 {
                     ecr.data.results = Tobk_Logic.Get_tjms2_List(request);
                 }
+              
                 else if (uri.IndexOf("/tms/tjms5/update") > 0)
                 {
                     ecr.data.results = Tobk_Logic.UpdateAll_tjms5(request);
+                }
+                else if (uri.IndexOf("/tms/tjms5/insert") > 0)
+                {
+                    ecr.data.results = Tobk_Logic.insert_tjms5(request);
                 }
                 else if (uri.IndexOf("/tms/tjms5") > 0)
                 {

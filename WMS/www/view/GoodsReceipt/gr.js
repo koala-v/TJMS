@@ -124,6 +124,14 @@ appControllers.controller('GrDetailCtrl', [
             // }
         };
 
+        $scope.gotoTjms5 = function () {
+            $state.go('grTjms5', {
+            'TrxNo': $scope.Detail.TrxNo,
+            }, {
+                reload: false
+            });
+            // }
+        };
         var UpdateTjms2 = function () {
             var Tjms2Filter = "TrxNo='" + $scope.Detail.Tjms2.TrxNo + "' and LineItemNo='" + $scope.Detail.Tjms2.LineItemNo + "' ";
             var objTjms2 = {
@@ -443,6 +451,7 @@ app.controller('JoblistingConfirmCtrl', ['ENV', '$scope', '$state', '$stateParam
 app.controller('JoblistingPrintCtrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiService', '$ionicPopup', '$ionicPlatform', '$cordovaSQLite', '$cordovaNetwork', '$ionicLoading', 'SqlService', 'PopupService',
     function (ENV, $scope, $state, $stateParams, ApiService, $ionicPopup, $ionicPlatform, $cordovaSQLite, $cordovaNetwork, $ionicLoading, SqlService, PopupService) {
         $scope.Flag = $stateParams.Flag;
+
         $scope.returnDetail = function () {
             if ($scope.Flag === 'N') {
                 $state.go('grDetail', {
@@ -458,6 +467,74 @@ app.controller('JoblistingPrintCtrl', ['ENV', '$scope', '$state', '$stateParams'
                 });
             }
 
+        };
+
+    }
+]);
+
+
+app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiService', '$ionicPopup', '$ionicPlatform', '$cordovaSQLite', '$cordovaNetwork', '$ionicLoading', 'SqlService', 'PopupService',
+    function (ENV, $scope, $state, $stateParams, ApiService, $ionicPopup, $ionicPlatform, $cordovaSQLite, $cordovaNetwork, $ionicLoading, SqlService, PopupService) {
+        $scope.Flag = $stateParams.Flag;
+        $scope.Detail = {
+            tjms5: {
+            TrxNo: $stateParams.TrxNo,
+            EquipmentType:''
+            },
+            tote1: {},
+        };
+        $scope.returnDetail = function () {
+                $state.go('grDetail', {
+                    'TrxNo': '1',
+                }, {
+                    reload: true
+                });
+        };
+
+        $scope.showTote1 = function (EquipmentType, LineItemNo) {
+            if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
+                var objUri = ApiService.Uri(true, '/api/tms/toet1');
+                objUri.addSearch('EquipmentType', EquipmentType.EquipmentType);
+                ApiService.Get(objUri, false).then(function success(result) {
+                    $scope.Detail.tote1 = result.data.results;
+                    if ($scope.Detail.tote1.length > 0) {
+                         $scope.Detail.EquipmentType=$scope.Detail.tote1[0].EquipmentType;
+                        $scope.Detail.tjms5.EquipmentTypeDescription = $scope.Detail.tote1[0].EquipmentTypeDescription;
+                        $scope.Detail.tjms5.Volume = $scope.Detail.tote1[0].Volume;
+                        $scope.Detail.tjms5.ChargeWeight = $scope.Detail.tote1[0].ChgWt;
+                        if ($scope.Detail.tote1[0].EditFlag === 'Y') {
+                            $scope.Detail.tjms5.disabled = false;
+                        } else {
+                            $scope.Detail.tjms5.disabled = true;
+                        }
+                    }
+
+                });
+            }
+        };
+        $scope.refreshEquipmentType = function (EquipmentType) {
+            if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
+                var objUri = ApiService.Uri(true, '/api/tms/toet1/EquipmentType');
+                objUri.addSearch('EquipmentType', EquipmentType);
+                ApiService.Get(objUri, false).then(function success(result) {
+                    $scope.EquipmentTypes = result.data.results;
+                });
+            }
+        };
+
+      $scope.insertTjms5 =function (){
+           if($scope.Detail.tjms5.TrxNo>0){
+               var arrtjms5 = [];
+             arrtjms5.push($scope.Detail.tjms5);
+             var jsonData = {
+                 "UpdateAllString": JSON.stringify(arrtjms5)
+             };
+             var objUri = ApiService.Uri(true, '/api/tms/tjms5/insert');
+             ApiService.Post(objUri, jsonData, true).then(function success(result) {
+             });
+
+
+           }
         };
 
     }
