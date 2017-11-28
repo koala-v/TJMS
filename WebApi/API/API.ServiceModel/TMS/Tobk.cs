@@ -19,6 +19,8 @@ namespace WebApi.ServiceModel.TMS
     [Route("/tms/toet1", "Get")]
     [Route("/tms/tjms5/update", "Post")]
     [Route("/tms/tjms5/insert", "Post")]
+    [Route("/tms/tjms5/delete", "get")]
+
 
     public class Tobk : IReturn<CommonResponse>
     {
@@ -110,6 +112,32 @@ namespace WebApi.ServiceModel.TMS
         }
 
 
+        public int DeleteLineItem(Tobk request)
+        {
+
+            int Result = -1;
+
+            try
+            {
+                using (var db = DbConnectionFactory.OpenDbConnection())
+                {
+                    if (request.TrxNo != null && request.TrxNo != "" && request.LineItemNo != null && request.LineItemNo != "")
+                    {
+                        string strSql = "";
+                        strSql = "Delete from Tjms5 where " +
+                          "TrxNo ='" + request.TrxNo + "'" +
+                          "And LineItemNo=" + request.LineItemNo + "";
+                        db.ExecuteSql(strSql);                  
+                    }
+
+                }
+                Result = 1;
+
+            }
+            catch { throw; }
+            return Result;
+        }
+
         public List<Tjms5> Get_tjms5_List(Tobk request)
         {
             List<Tjms5> Result = null;
@@ -130,8 +158,8 @@ namespace WebApi.ServiceModel.TMS
                             " ChgWtRoundUp," +
                             " ISNULL(VehicleNo ,'') as VehicleNo," +
                             " '' as disabled  ," +
-                            " (select StartDateTime from tjms4 where tjms4.TrxNo = tjms5.TrxNo and tjms4.LineItemNo = tjms5.LineItemNo ) as StartDateTime," +
-                            " (select EndDateTime from tjms4 where tjms4.TrxNo = tjms5.TrxNo and tjms4.LineItemNo = tjms5.LineItemNo ) as EndDateTime " +
+                            " (select Top 1  StartDateTime from tjms4 where tjms4.TrxNo = tjms5.TrxNo  ) as StartDateTime," +
+                            " (select Top 1  EndDateTime from tjms4 where tjms4.TrxNo = tjms5.TrxNo  ) as EndDateTime " +
                             " from tjms5 " +
                             "where trxno = " + request.TrxNo + "";       
                     Result = db.Select<Tjms5>(strSql);
@@ -231,16 +259,16 @@ namespace WebApi.ServiceModel.TMS
                                     continue;
                                 }
                                 int TrxNo = Modfunction.ReturnZero(ja[i]["TrxNo"].ToString());
-                                string EquipmentType = Modfunction.CheckNull(ja[i]["EquipmentType"]);
-                                string EquipmentTypeDescription = Modfunction.CheckNull(ja[i]["EquipmentTypeDescription"]);
-                                string ContainerNo = Modfunction.CheckNull(ja[i]["ContainerNo"]);
-                                string CargoDescription = Modfunction.CheckNull(ja[i]["CargoDescription"]);
+                                string EquipmentType = Modfunction.SQLSafeValue(Modfunction.CheckNull(ja[i]["EquipmentType"]));
+                                string EquipmentTypeDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(ja[i]["EquipmentTypeDescription"]));
+                                string ContainerNo =Modfunction.SQLSafeValue( Modfunction.CheckNull(ja[i]["ContainerNo"]));
+                                string CargoDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(ja[i]["CargoDescription"]));
                                 int Volume = Modfunction.ReturnZero(ja[i]["Volume"].ToString());
                                 int ChargeWeight = Modfunction.ReturnZero(ja[i]["ChargeWeight"].ToString());
                                 int ChgWtRoundUp = Modfunction.ReturnZero(Modfunction.CheckNull(ja[i]["ChgWtRoundUp"]));                  
-                                string VehicleNo = Modfunction.CheckNull(ja[i]["VehicleNo"]);
-                                string startDateTime = "select  Top 1 ISNULL(StartDateTime,'NULL') AS StartDateTime  from tjms4 where TrxNo=" + TrxNo + "";
-                                string endDateTime = "select  Top 1  ISNULL(EndDateTime,'NULL') AS EndDateTime  from tjms4 where TrxNo=" + TrxNo + "";
+                                string VehicleNo = Modfunction.SQLSafeValue(Modfunction.CheckNull(ja[i]["VehicleNo"]));
+                                string startDateTime = "(select  Top 1 ISNULL(StartDateTime,NULL) AS StartDateTime  from tjms4 where TrxNo=" + TrxNo + ")  ";
+                                string endDateTime = "(select  Top 1  ISNULL(EndDateTime,NULL) AS EndDateTime  from tjms4 where TrxNo=" + TrxNo + ")";
                                 string strSql = "";
 
 
@@ -258,6 +286,7 @@ namespace WebApi.ServiceModel.TMS
                                 {
 
                                     strSql = "insert into tjms5 (" +
+                                        " TrxNo ," +
                                         " LineItemNo ," +
                                         " EquipmentType ," +
                                         " EquipmentTypeDescription  ," +
@@ -266,11 +295,11 @@ namespace WebApi.ServiceModel.TMS
                                         " Volume ," +
                                         " ChargeWeight ," +
                                         " ChgWtRoundUp ," +
-                                        " VehicleNo  ," +
-                                       " StartDateTime  ," +
-                                        " EndDateTime  " +
+                                        " VehicleNo  " +
+                                     
                                         "  )" +
                                               "values( " +
+                                              TrxNo + " , " +
                                         intMaxLineItemNo + " , " +
                                         EquipmentType + " , " +
                                         EquipmentTypeDescription + " , " +
@@ -279,9 +308,8 @@ namespace WebApi.ServiceModel.TMS
                                         Volume + " , " +
                                         ChargeWeight + " , " +
                                         ChgWtRoundUp + " , " +
-                                        VehicleNo + " , " +
-                                        startDateTime + " , " +
-                                        endDateTime + "" +
+                                        VehicleNo + "  " +
+                                      
                                             ") ";
                                     db.ExecuteSql(strSql);
                                 

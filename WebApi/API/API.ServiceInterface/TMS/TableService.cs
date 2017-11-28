@@ -39,6 +39,10 @@ namespace WebApi.ServiceInterface.TMS
                 {
                     ecr.data.results = Tobk_Logic.insert_tjms5(request);
                 }
+                else if (uri.IndexOf("/tms/tjms5/delete") > 0)
+                {
+                    ecr.data.results = Tobk_Logic.DeleteLineItem(request);
+                }
                 else if (uri.IndexOf("/tms/tjms5") > 0)
                 {
                     ecr.data.results = Tobk_Logic.Get_tjms5_List(request);

@@ -12,12 +12,12 @@
         <div class="row">
             <span class="input-label" style="padding-top:2px; padding-bottom: 2px;"> &nbsp; &nbsp;&nbsp;Code &nbsp;&nbsp;</span>
             <div class="col" style="padding:0px;">
-              <ui-select theme="bootstrap" ng-model="EquipmentType.selected" reset-search-input="true" on-select="showTote1(EquipmentType.selected,tjms5.LineItemNo)">
-                <ui-select-match allow-clear="true" placeholder="Enter to search..." style="overflow:hidden;">{{$select.selected.EquipmentType}}</ui-select-match>
-                <ui-select-choices repeat="EquipmentType in EquipmentTypes track by $index" refresh="refreshEquipmentType($select.search)" refresh-delay="0" position="down">
-                  <div ng-bind-html="EquipmentType.EquipmentType | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
+                <ui-select theme="bootstrap" ng-model="EquipmentType.selected" reset-search-input="true" on-select="showTote1(EquipmentType.selected,tjms5.LineItemNo)">
+                    <ui-select-match allow-clear="true" placeholder="Enter to search..." style="overflow:hidden;">{{$select.selected.EquipmentType}}</ui-select-match>
+                    <ui-select-choices repeat="EquipmentType in EquipmentTypes track by $index" refresh="refreshEquipmentType($select.search)" refresh-delay="0" position="down">
+                        <div ng-bind-html="EquipmentType.EquipmentType | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
         </div>
 
@@ -50,7 +50,7 @@
             <div class="col" style="padding:0px;">
                 <label class="item item-input">
                     <span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Chem/Plt Wt &nbsp;&nbsp;</span>
-                    <input type="text" id="" ng-model="Detail.tjms5.Volume"  data-ng-disabled="Detail.tjms5.disabled" placeholder="Chem/Plt Wt" style="padding-right: 14px;">
+                    <input type="number" id="" ng-model="Detail.tjms5.Volume" data-ng-disabled="Detail.tjms5.disabled" placeholder="Chem/Plt Wt" style="padding-right:1em;padding-top: 0px;">
                 </label>
             </div>
         </div>
@@ -58,7 +58,7 @@
             <div class="col" style="padding:0px;">
                 <label class="item item-input">
                     <span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Chg Wt &nbsp;&nbsp;</span>
-                    <input type="text" id="" ng-model="Detail.tjms5.ChargeWeight"  data-ng-disabled="Detail.tjms5.disabled" placeholder="Chg Wt " style="padding-right: 14px;">
+                    <input type="number" id="" ng-model="Detail.tjms5.ChargeWeight" data-ng-disabled="Detail.tjms5.disabled" placeholder="Chg Wt " style="padding-right:1em;padding-top: 0px;">
                 </label>
             </div>
         </div>
@@ -66,7 +66,7 @@
             <div class="col" style="padding:0px;">
                 <label class="item item-input">
                     <span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Chg Wt(Rnd Up) &nbsp;&nbsp;</span>
-                    <input type="text" id="" ng-model="Detail.tjms5.ChgWtRoundUp"  placeholder="Chg Wt(Rnd Up) " style="padding-right: 14px;">
+                    <input type="number" id="" ng-model="Detail.tjms5.ChgWtRoundUp" placeholder="Chg Wt(Rnd Up) " style="padding-right: 14px;">
                 </label>
             </div>
         </div>
@@ -80,8 +80,6 @@
             </div>
         </div>
 
-
-    </ion-content>
     </ion-content>
 
     <ion-footer-bar class="bar-positive">

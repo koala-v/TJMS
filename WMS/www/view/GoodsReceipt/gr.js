@@ -126,7 +126,7 @@ appControllers.controller('GrDetailCtrl', [
 
         $scope.gotoTjms5 = function () {
             $state.go('grTjms5', {
-            'TrxNo': $scope.Detail.TrxNo,
+                'TrxNo': $scope.Detail.TrxNo,
             }, {
                 reload: false
             });
@@ -156,6 +156,17 @@ appControllers.controller('GrDetailCtrl', [
             ionicDatePicker.openDatePicker(ipObj1);
         };
 
+        $scope.DeleteLine = function (LineItemNo) {
+            if (LineItemNo > 0 && $scope.Detail.TrxNo !== "") {
+                var objUri = ApiService.Uri(true, '/api/tms/tjms5/delete');
+                objUri.addSearch('TrxNo', $scope.Detail.TrxNo);
+                objUri.addSearch('LineItemNo', LineItemNo);
+                ApiService.Get(objUri, false).then(function success(result) {
+                    getTjms5($scope.Detail.TrxNo);
+
+                });
+            }
+        };
         $scope.showTote1 = function (EquipmentType, LineItemNo) {
             if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
                 var objUri = ApiService.Uri(true, '/api/tms/toet1');
@@ -185,20 +196,19 @@ appControllers.controller('GrDetailCtrl', [
                 });
             }
         };
-        var updateTjms5 =function (){
-           if($scope.Detail.tjms5.length>0){
-             for (var i =0;i<$scope.Detail.tjms5.length;i++){
-               var arrtjms5 = [];
-             arrtjms5.push($scope.Detail.tjms5[i]);
-             var jsonData = {
-                 "UpdateAllString": JSON.stringify(arrtjms5)
-             };
-             var objUri = ApiService.Uri(true, '/api/tms/tjms5/update');
-             ApiService.Post(objUri, jsonData, true).then(function success(result) {
-             });
-             }
+        var updateTjms5 = function () {
+            if ($scope.Detail.tjms5.length > 0) {
+                for (var i = 0; i < $scope.Detail.tjms5.length; i++) {
+                    var arrtjms5 = [];
+                    arrtjms5.push($scope.Detail.tjms5[i]);
+                    var jsonData = {
+                        "UpdateAllString": JSON.stringify(arrtjms5)
+                    };
+                    var objUri = ApiService.Uri(true, '/api/tms/tjms5/update');
+                    ApiService.Post(objUri, jsonData, true).then(function success(result) {});
+                }
 
-           }
+            }
         };
         $scope.gotoConfirm = function () {
             UpdateTjms2();
@@ -258,6 +268,7 @@ appControllers.controller('GrDetailCtrl', [
             objUri.addSearch('TrxNo', TrxNo);
             ApiService.Get(objUri, true).then(function success(result) {
                 var results = result.data.results;
+                dataResults =new Array();
                 if (results.length > 0) {
                     // $scope.Detail.tjms5 = results;
                     for (var i = 0; i < results.length; i++) {
@@ -266,6 +277,10 @@ appControllers.controller('GrDetailCtrl', [
                         dataResults = dataResults.concat(jobs);
                         $scope.Detail.tjms5 = dataResults;
                     }
+                }
+                else{
+
+                    $scope.Detail.tjms5 = dataResults;
                 }
             });
         };
@@ -472,23 +487,22 @@ app.controller('JoblistingPrintCtrl', ['ENV', '$scope', '$state', '$stateParams'
     }
 ]);
 
-
 app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiService', '$ionicPopup', '$ionicPlatform', '$cordovaSQLite', '$cordovaNetwork', '$ionicLoading', 'SqlService', 'PopupService',
     function (ENV, $scope, $state, $stateParams, ApiService, $ionicPopup, $ionicPlatform, $cordovaSQLite, $cordovaNetwork, $ionicLoading, SqlService, PopupService) {
         $scope.Flag = $stateParams.Flag;
         $scope.Detail = {
             tjms5: {
-            TrxNo: $stateParams.TrxNo,
-            EquipmentType:''
+                TrxNo: $stateParams.TrxNo,
+                EquipmentType: ''
             },
             tote1: {},
         };
         $scope.returnDetail = function () {
-                $state.go('grDetail', {
-                    'TrxNo': '1',
-                }, {
-                    reload: true
-                });
+            $state.go('grDetail', {
+                'TrxNo': $scope.Detail.tjms5.TrxNo,
+            }, {
+                reload: true
+            });
         };
 
         $scope.showTote1 = function (EquipmentType, LineItemNo) {
@@ -498,7 +512,7 @@ app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiSe
                 ApiService.Get(objUri, false).then(function success(result) {
                     $scope.Detail.tote1 = result.data.results;
                     if ($scope.Detail.tote1.length > 0) {
-                         $scope.Detail.EquipmentType=$scope.Detail.tote1[0].EquipmentType;
+                        $scope.Detail.tjms5.EquipmentType = $scope.Detail.tote1[0].EquipmentType;
                         $scope.Detail.tjms5.EquipmentTypeDescription = $scope.Detail.tote1[0].EquipmentTypeDescription;
                         $scope.Detail.tjms5.Volume = $scope.Detail.tote1[0].Volume;
                         $scope.Detail.tjms5.ChargeWeight = $scope.Detail.tote1[0].ChgWt;
@@ -522,19 +536,19 @@ app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiSe
             }
         };
 
-      $scope.insertTjms5 =function (){
-           if($scope.Detail.tjms5.TrxNo>0){
-               var arrtjms5 = [];
-             arrtjms5.push($scope.Detail.tjms5);
-             var jsonData = {
-                 "UpdateAllString": JSON.stringify(arrtjms5)
-             };
-             var objUri = ApiService.Uri(true, '/api/tms/tjms5/insert');
-             ApiService.Post(objUri, jsonData, true).then(function success(result) {
-             });
+        $scope.insertTjms5 = function () {
+            if ($scope.Detail.tjms5.TrxNo > 0) {
+                var arrtjms5 = [];
+                arrtjms5.push($scope.Detail.tjms5);
+                var jsonData = {
+                    "UpdateAllString": JSON.stringify(arrtjms5)
+                };
+                var objUri = ApiService.Uri(true, '/api/tms/tjms5/insert');
+                ApiService.Post(objUri, jsonData, true).then(function success(result) {
+                    $scope.returnDetail();
+                });
 
-
-           }
+            }
         };
 
     }
