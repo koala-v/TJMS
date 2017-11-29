@@ -47,14 +47,14 @@ namespace WebApi.ServiceInterface.TMS
                 {
                     ecr.data.results = Tobk_Logic.Get_tjms5_List(request);
                 }
-                else if (uri.IndexOf("/tms/toet1/EquipmentType") > 0)
+                else if (uri.IndexOf("/tms/Tovt1/EquipmentType") > 0)
                 {
                     ecr.data.results = Tobk_Logic.Get_EquipmentType(request);
                 }
               
-                else if (uri.IndexOf("/tms/toet1") > 0)
+                else if (uri.IndexOf("/tms/Tovt1") > 0)
                 {
-                    ecr.data.results = Tobk_Logic.list_toet1(request);
+                    ecr.data.results = Tobk_Logic.list_Tovt1(request);
                 }
                 ecr.meta.code = 200;
                 ecr.meta.message = "OK";

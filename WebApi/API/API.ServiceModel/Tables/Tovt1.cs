@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WebApi.ServiceModel.Tables
 {
-   public  class Toet1
+   public  class Tovt1
     {
         public int LineItemNo { get; set; }
         public string EquipmentType { get; set; }

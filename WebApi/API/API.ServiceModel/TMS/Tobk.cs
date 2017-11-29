@@ -15,8 +15,8 @@ namespace WebApi.ServiceModel.TMS
     [Route("/tms/tjms2/update", "Get")] //
     [Route("/tms/tjms2/confirm", "Get")] //update?Key=,Remark=,TableName=
     [Route("/tms/tjms2/PickupTimeUpdate", "Post")] 
-    [Route("/tms/toet1/EquipmentType", "Get")]
-    [Route("/tms/toet1", "Get")]
+    [Route("/tms/Tovt1/EquipmentType", "Get")]
+    [Route("/tms/Tovt1", "Get")]
     [Route("/tms/tjms5/update", "Post")]
     [Route("/tms/tjms5/insert", "Post")]
     [Route("/tms/tjms5/delete", "get")]
@@ -182,9 +182,9 @@ namespace WebApi.ServiceModel.TMS
             return Result;
         }
 
-        public List<Toet1> Get_EquipmentType(Tobk request)
+        public List<Tovt1> Get_EquipmentType(Tobk request)
         {
-            List<Toet1> Result = null;
+            List<Tovt1> Result = null;
             try
             {
                 using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
@@ -197,8 +197,8 @@ namespace WebApi.ServiceModel.TMS
 
                             //string strSQL = "select DISTINCT CustomerCode as BusinessPartyCode ,CustomerName as  BusinessPartyName  from tjms1 where IsNUll(StatusCode,'')<>'DEL' And CustomerCode LIKE '" + request.BusinessPartyName + "%' Order By tjms1.CustomerCode Asc";
 
-                            string strSQL = "Select EquipmentType From toet1 Where EquipmentType LIKE '" + request.EquipmentType + "%'";
-                            Result = db.Select<Toet1>(strSQL);
+                            string strSQL = "Select VehicleType as  EquipmentType From Tovt1 Where VehicleType LIKE '" + request.EquipmentType + "%'";
+                            Result = db.Select<Tovt1>(strSQL);
                         }
 
                     }
@@ -211,9 +211,9 @@ namespace WebApi.ServiceModel.TMS
 
         }
 
-        public List<Toet1> list_toet1(Tobk request)
+        public List<Tovt1> list_Tovt1(Tobk request)
         {
-            List<Toet1> Result = null;
+            List<Tovt1> Result = null;
             try
             {
                 using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
@@ -223,8 +223,8 @@ namespace WebApi.ServiceModel.TMS
                     {
                         if (!string.IsNullOrEmpty(request.EquipmentType))
                         {
-                            string strSQL = "Select ISNULL(EquipmentType,'') as EquipmentType, ISNULL(EquipmentTypeDescription,'') as EquipmentTypeDescription,Volume,ChgWt,ISNULL(EditFlag,'') as EditFlag From toet1 Where EquipmentType = '" + request.EquipmentType + "'";
-                            Result = db.Select<Toet1>(strSQL);
+                            string strSQL = "Select ISNULL(VehicleType,'') as EquipmentType, ISNULL(VehicleTypeDescription,'') as EquipmentTypeDescription,Volume,ChgWt,ISNULL(EditFlag,'') as EditFlag From Tovt1 Where VehicleType = '" + request.EquipmentType + "'";
+                            Result = db.Select<Tovt1>(strSQL);
                         }
 
                     }

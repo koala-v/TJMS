@@ -169,7 +169,7 @@ appControllers.controller('GrDetailCtrl', [
         };
         $scope.showTote1 = function (EquipmentType, LineItemNo) {
             if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
-                var objUri = ApiService.Uri(true, '/api/tms/toet1');
+                var objUri = ApiService.Uri(true, '/api/tms/Tovt1');
                 objUri.addSearch('EquipmentType', EquipmentType.EquipmentType);
                 ApiService.Get(objUri, false).then(function success(result) {
                     $scope.Detail.tote1 = result.data.results;
@@ -189,7 +189,7 @@ appControllers.controller('GrDetailCtrl', [
         };
         $scope.refreshEquipmentType = function (EquipmentType) {
             if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
-                var objUri = ApiService.Uri(true, '/api/tms/toet1/EquipmentType');
+                var objUri = ApiService.Uri(true, '/api/tms/Tovt1/EquipmentType');
                 objUri.addSearch('EquipmentType', EquipmentType);
                 ApiService.Get(objUri, false).then(function success(result) {
                     $scope.EquipmentTypes = result.data.results;
@@ -507,7 +507,7 @@ app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiSe
 
         $scope.showTote1 = function (EquipmentType, LineItemNo) {
             if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
-                var objUri = ApiService.Uri(true, '/api/tms/toet1');
+                var objUri = ApiService.Uri(true, '/api/tms/Tovt1');
                 objUri.addSearch('EquipmentType', EquipmentType.EquipmentType);
                 ApiService.Get(objUri, false).then(function success(result) {
                     $scope.Detail.tote1 = result.data.results;
@@ -528,7 +528,7 @@ app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiSe
         };
         $scope.refreshEquipmentType = function (EquipmentType) {
             if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
-                var objUri = ApiService.Uri(true, '/api/tms/toet1/EquipmentType');
+                var objUri = ApiService.Uri(true, '/api/tms/Tovt1/EquipmentType');
                 objUri.addSearch('EquipmentType', EquipmentType);
                 ApiService.Get(objUri, false).then(function success(result) {
                     $scope.EquipmentTypes = result.data.results;
