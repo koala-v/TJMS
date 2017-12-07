@@ -198,15 +198,28 @@ appControllers.controller('GrDetailCtrl', [
         };
         var updateTjms5 = function () {
             if ($scope.Detail.tjms5.length > 0) {
-                for (var i = 0; i < $scope.Detail.tjms5.length; i++) {
-                    var arrtjms5 = [];
-                    arrtjms5.push($scope.Detail.tjms5[i]);
-                    var jsonData = {
-                        "UpdateAllString": JSON.stringify(arrtjms5)
-                    };
+              for (var i = 0; i < $scope.Detail.tjms5.length; i++) {
                     var objUri = ApiService.Uri(true, '/api/tms/tjms5/update');
-                    ApiService.Post(objUri, jsonData, true).then(function success(result) {});
-                }
+                objUri.addSearch('TrxNo', $scope.Detail.tjms5[i].TrxNo);
+                    objUri.addSearch('LineItemNo', $scope.Detail.tjms5[i].LineItemNo);
+                objUri.addSearch('EquipmentType', $scope.Detail.tjms5[i].EquipmentType);
+                objUri.addSearch('EquipmentTypeDescription', $scope.Detail.tjms5[i].EquipmentTypeDescription);
+                objUri.addSearch('ContainerNo', $scope.Detail.tjms5[i].ContainerNo);
+                objUri.addSearch('Volume', $scope.Detail.tjms5[i].Volume);
+                objUri.addSearch('ChargeWeight', $scope.Detail.tjms5[i].ChargeWeight);
+                objUri.addSearch('ChgWtRoundUp', $scope.Detail.tjms5[i].ChgWtRoundUp);
+                objUri.addSearch('VehicleNo', $scope.Detail.tjms5[i].VehicleNo);
+                  ApiService.Get(objUri, true).then(function success(result) {});
+              }
+                // for (var i = 0; i < $scope.Detail.tjms5.length; i++) {
+                //     var arrtjms5 = [];
+                //     arrtjms5.push($scope.Detail.tjms5[i]);
+                //     var jsonData = {
+                //         "UpdateAllString": JSON.stringify(arrtjms5)
+                //     };
+                //     var objUri = ApiService.Uri(true, '/api/tms/tjms5/update');
+                //     ApiService.Post(objUri, jsonData, true).then(function success(result) {});
+                // }
 
             }
         };
@@ -268,7 +281,7 @@ appControllers.controller('GrDetailCtrl', [
             objUri.addSearch('TrxNo', TrxNo);
             ApiService.Get(objUri, true).then(function success(result) {
                 var results = result.data.results;
-                dataResults =new Array();
+                dataResults = new Array();
                 if (results.length > 0) {
                     // $scope.Detail.tjms5 = results;
                     for (var i = 0; i < results.length; i++) {
@@ -277,8 +290,7 @@ appControllers.controller('GrDetailCtrl', [
                         dataResults = dataResults.concat(jobs);
                         $scope.Detail.tjms5 = dataResults;
                     }
-                }
-                else{
+                } else {
 
                     $scope.Detail.tjms5 = dataResults;
                 }
@@ -493,7 +505,14 @@ app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiSe
         $scope.Detail = {
             tjms5: {
                 TrxNo: $stateParams.TrxNo,
-                EquipmentType: ''
+                EquipmentType: '',
+                CargoDescription : '',
+                ChargeWeight:0,
+                ChgWtRoundUp:0,
+                ContainerNo: '',
+                EquipmentTypeDescription: '',
+                VehicleNo: '',
+                Volume:0
             },
             tote1: {},
         };
@@ -538,15 +557,28 @@ app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiSe
 
         $scope.insertTjms5 = function () {
             if ($scope.Detail.tjms5.TrxNo > 0) {
-                var arrtjms5 = [];
-                arrtjms5.push($scope.Detail.tjms5);
-                var jsonData = {
-                    "UpdateAllString": JSON.stringify(arrtjms5)
-                };
                 var objUri = ApiService.Uri(true, '/api/tms/tjms5/insert');
-                ApiService.Post(objUri, jsonData, true).then(function success(result) {
+                objUri.addSearch('TrxNo', $scope.Detail.tjms5.TrxNo);
+                objUri.addSearch('EquipmentType', $scope.Detail.tjms5.EquipmentType);
+                objUri.addSearch('EquipmentTypeDescription', $scope.Detail.tjms5.EquipmentTypeDescription);
+                objUri.addSearch('ContainerNo', $scope.Detail.tjms5.ContainerNo);
+                objUri.addSearch('Volume', $scope.Detail.tjms5.Volume);
+                objUri.addSearch('ChargeWeight', $scope.Detail.tjms5.ChargeWeight);
+                objUri.addSearch('ChgWtRoundUp', $scope.Detail.tjms5.ChgWtRoundUp);
+                objUri.addSearch('VehicleNo', $scope.Detail.tjms5.VehicleNo);
+                ApiService.Get(objUri, true).then(function success(result) {
                     $scope.returnDetail();
                 });
+
+                // var arrtjms5 = [];
+                // arrtjms5.push($scope.Detail.tjms5);
+                // var jsonData = {
+                //     "UpdateAllString": JSON.stringify(arrtjms5)
+                // };
+                // var objUri = ApiService.Uri(true, '/api/tms/tjms5/insert');
+                // ApiService.Post(objUri, jsonData, true).then(function success(result) {
+                //     $scope.returnDetail();
+                // });
 
             }
         };

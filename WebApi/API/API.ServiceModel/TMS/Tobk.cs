@@ -17,8 +17,8 @@ namespace WebApi.ServiceModel.TMS
     [Route("/tms/tjms2/PickupTimeUpdate", "Post")] 
     [Route("/tms/Tovt1/EquipmentType", "Get")]
     [Route("/tms/Tovt1", "Get")]
-    [Route("/tms/tjms5/update", "Post")]
-    [Route("/tms/tjms5/insert", "Post")]
+    [Route("/tms/tjms5/update", "get")]
+    [Route("/tms/tjms5/insert", "get")]
     [Route("/tms/tjms5/delete", "get")]
 
 
@@ -50,7 +50,16 @@ namespace WebApi.ServiceModel.TMS
 
         // tjms end
         public string EquipmentType { get; set; }
-}
+        public string EquipmentTypeDescription { get; set; }
+        public string ContainerNo { get; set; }
+        public string CargoDescription { get; set; }
+        public int Volume { get; set; }
+        public int ChargeWeight { get; set; }
+        public int ChgWtRoundUp { get; set; }
+        public string VehicleNo { get; set; }
+
+
+    }
     public class Tobk_Logic
     {
         public IDbConnectionFactory DbConnectionFactory { get; set; }
@@ -246,27 +255,27 @@ namespace WebApi.ServiceModel.TMS
             {
                 using (var db = DbConnectionFactory.OpenDbConnection())
                 {
-                    if (request.UpdateAllString != null && request.UpdateAllString != "")
-                    {
-                        JArray ja = (JArray)JsonConvert.DeserializeObject(request.UpdateAllString);
-                        if (ja != null)
-                        {
-                            for (int i = 0; i < ja.Count(); i++)
-                            {
+                    //if (request.UpdateAllString != null && request.UpdateAllString != "")
+                    //{
+                    //    JArray ja = (JArray)JsonConvert.DeserializeObject(request.UpdateAllString);
+                    //    if (ja != null)
+                    //    {
+                    //        for (int i = 0; i < ja.Count(); i++)
+                    //        {
 
-                                if (ja[i]["TrxNo"] == null || ja[i]["TrxNo"].ToString() == "")
+                                if ( request.TrxNo.Length >0)
                                 {
-                                    continue;
-                                }
-                                int TrxNo = Modfunction.ReturnZero(ja[i]["TrxNo"].ToString());
-                                string EquipmentType = Modfunction.SQLSafeValue(Modfunction.CheckNull(ja[i]["EquipmentType"]));
-                                string EquipmentTypeDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(ja[i]["EquipmentTypeDescription"]));
-                                string ContainerNo =Modfunction.SQLSafeValue( Modfunction.CheckNull(ja[i]["ContainerNo"]));
-                                string CargoDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(ja[i]["CargoDescription"]));
-                                int Volume = Modfunction.ReturnZero(ja[i]["Volume"].ToString());
-                                int ChargeWeight = Modfunction.ReturnZero(ja[i]["ChargeWeight"].ToString());
-                                int ChgWtRoundUp = Modfunction.ReturnZero(Modfunction.CheckNull(ja[i]["ChgWtRoundUp"]));                  
-                                string VehicleNo = Modfunction.SQLSafeValue(Modfunction.CheckNull(ja[i]["VehicleNo"]));
+                               
+                             
+                                int TrxNo = Modfunction.ReturnZero(request.TrxNo.ToString());
+                                string EquipmentType = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.EquipmentType));
+                                string EquipmentTypeDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.EquipmentTypeDescription));
+                                string ContainerNo =Modfunction.SQLSafeValue( Modfunction.CheckNull(request.ContainerNo));
+                                string CargoDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.CargoDescription));
+                                int Volume = Modfunction.ReturnZero(request.Volume.ToString());
+                                int ChargeWeight = Modfunction.ReturnZero(request.ChargeWeight.ToString());
+                                int ChgWtRoundUp = Modfunction.ReturnZero(Modfunction.CheckNull(request.ChgWtRoundUp));                  
+                                string VehicleNo = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.VehicleNo));
                                 string startDateTime = "(select  Top 1 ISNULL(StartDateTime,NULL) AS StartDateTime  from tjms4 where TrxNo=" + TrxNo + ")  ";
                                 string endDateTime = "(select  Top 1  ISNULL(EndDateTime,NULL) AS EndDateTime  from tjms4 where TrxNo=" + TrxNo + ")";
                                 string strSql = "";
@@ -312,15 +321,15 @@ namespace WebApi.ServiceModel.TMS
                                       
                                             ") ";
                                     db.ExecuteSql(strSql);
-                                
 
-                                }
-
-                            }
                         }
+                    }
+
+                        //    }
+                        //}
                         Result = 1;
 
-                    }
+                    //}
                 }
             }
             catch { throw; }
@@ -335,51 +344,62 @@ namespace WebApi.ServiceModel.TMS
             {
                 using (var db = DbConnectionFactory.OpenDbConnection())
                 {
-                    if (request.UpdateAllString != null && request.UpdateAllString != "")
+                    //if (request.UpdateAllString != null && request.UpdateAllString != "")
+                    //{
+                    //    JArray ja = (JArray)JsonConvert.DeserializeObject(request.UpdateAllString);
+                    //    if (ja != null)
+                    //    {
+                    //        for (int i = 0; i < ja.Count(); i++)
+                    //        {
+
+                    if (request.TrxNo.Length > 0)
                     {
-                        JArray ja = (JArray)JsonConvert.DeserializeObject(request.UpdateAllString);
-                        if (ja != null)
-                        {
-                            for (int i = 0; i < ja.Count(); i++)
-                            {
 
-                                if (ja[i]["TrxNo"] == null || ja[i]["TrxNo"].ToString() == "")
-                                {
-                                    continue;
-                                }
-                                int TrxNo = Modfunction.ReturnZero(ja[i]["TrxNo"].ToString());
-                                string EquipmentType = Modfunction.CheckNull(ja[i]["EquipmentType"]);                        
-                                string EquipmentTypeDescription = Modfunction.CheckNull(ja[i]["EquipmentTypeDescription"]);
-                                string ContainerNo = Modfunction.CheckNull(ja[i]["ContainerNo"]);
-                                string CargoDescription = Modfunction.CheckNull(ja[i]["CargoDescription"]);
-                                int Volume = Modfunction.ReturnZero(ja[i]["Volume"].ToString ());
-                                int ChargeWeight = Modfunction.ReturnZero(ja[i]["ChargeWeight"].ToString());
-                                int ChgWtRoundUp = Modfunction.ReturnZero(ja[i]["ChgWtRoundUp"].ToString());
-                                int LineItemNo = Modfunction.ReturnZero(ja[i]["LineItemNo"].ToString());
-                                string VehicleNo = Modfunction.CheckNull(ja[i]["VehicleNo"]);
+                        int TrxNo = Modfunction.ReturnZero(request.TrxNo.ToString());
+                        string EquipmentType = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.EquipmentType));
+                        string EquipmentTypeDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.EquipmentTypeDescription));
+                        string ContainerNo = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.ContainerNo));
+                        string CargoDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.CargoDescription));
+                        int Volume = Modfunction.ReturnZero(request.Volume.ToString());
+                        int ChargeWeight = Modfunction.ReturnZero(request.ChargeWeight.ToString());
+                        int ChgWtRoundUp = Modfunction.ReturnZero(Modfunction.CheckNull(request.ChgWtRoundUp));
+                        string VehicleNo = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.VehicleNo));
+                        int LineItemNo = Modfunction.ReturnZero(request.LineItemNo.ToString());
 
-                                string strSql="";
+                        //int TrxNo = Modfunction.ReturnZero(request.TrxNo.ToString());
+                        //string EquipmentType = Modfunction.SQLSafeValue(request.EquipmentType);
+                        //string EquipmentTypeDescription = Modfunction.SQLSafeValue(request.EquipmentTypeDescription);
+                        //string ContainerNo = Modfunction.SQLSafeValue(request.ContainerNo);
+                        //string CargoDescription = Modfunction.SQLSafeValue(request.CargoDescription);
+                        //int Volume = Modfunction.ReturnZero(request.Volume.ToString());
+                        //int ChargeWeight = Modfunction.ReturnZero(request.ChargeWeight.ToString());
+                        //int ChgWtRoundUp = Modfunction.ReturnZero(Modfunction.CheckNull(request.ChgWtRoundUp));
+                        //string VehicleNo = Modfunction.SQLSafeValue(request.VehicleNo);
+                        //int LineItemNo = Modfunction.ReturnZero(request.LineItemNo.ToString());
+
+
+                        string strSql="";
                                 if (LineItemNo != 0)
                                 {
                                     strSql = "Update tjms5 set " +
-                                        "EquipmentType='" + EquipmentType + "' , " +
-                                         "EquipmentTypeDescription='" + EquipmentTypeDescription + "' ," +
-                                         "ContainerNo='" + ContainerNo + "' , " +
-                                         "CargoDescription='" + CargoDescription + "' , " +
+                                        "EquipmentType=" + EquipmentType + " , " +
+                                         "EquipmentTypeDescription=" + EquipmentTypeDescription + " ," +
+                                         "ContainerNo=" + ContainerNo + " , " +
+                                         "CargoDescription=" + CargoDescription + " , " +
                                          "Volume=" + Volume + " ," +
                                          "ChargeWeight=" + ChargeWeight + " , " +
                                           "ChgWtRoundUp=" + ChgWtRoundUp + ",  " +
-                                         " VehicleNo='" + VehicleNo + "' " +
+                                         " VehicleNo=" + VehicleNo + " " +
                                           "Where LineItemNo =" + LineItemNo + " And TrxNo=" + TrxNo + "";
                                     db.ExecuteSql(strSql);
                                
                                 }
-
-                            }
-                        }
-                        Result = 1;
-
                     }
+                    //    }
+                    //}
+                    Result = 1;
+
+                    //}
                 }
             }
             catch { throw; }
