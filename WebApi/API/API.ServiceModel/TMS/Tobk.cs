@@ -155,10 +155,19 @@ namespace WebApi.ServiceModel.TMS
                 using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
                     string strSql = "";
+                    string strWhere = "";
+                    if (  request.LineItemNo != null && request.LineItemNo.ToString() != "")
+                    {
+                        strWhere = " where trxno = " + request.TrxNo + " And LineItemNo="+request .LineItemNo+"";
+                    }
+                    else
+                    {
+                        strWhere = " where trxno = " + request.TrxNo + "";
+                    }
                     strSql =
                             "  select ISNULL( EquipmentType,'') as EquipmentType , " +
                             "  LineItemNo ," +
-                             " TrxNo , "+
+                             " TrxNo , " +
                             " ISNULL( EquipmentTypeDescription,'') as EquipmentTypeDescription," +
                             " ISNULL(ContainerNo,'') as ContainerNo ," +
                             "  ISNULL(CargoDescription ,'') as CargoDescription," +
@@ -169,8 +178,8 @@ namespace WebApi.ServiceModel.TMS
                             " '' as disabled  ," +
                             " (select Top 1  StartDateTime from tjms4 where tjms4.TrxNo = tjms5.TrxNo  ) as StartDateTime," +
                             " (select Top 1  EndDateTime from tjms4 where tjms4.TrxNo = tjms5.TrxNo  ) as EndDateTime " +
-                            " from tjms5 " +
-                            "where trxno = " + request.TrxNo + "";       
+                            " from tjms5 " + strWhere;
+
                     Result = db.Select<Tjms5>(strSql);
                 }
             }

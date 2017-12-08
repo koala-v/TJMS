@@ -251,6 +251,12 @@ app.config( [ '$httpProvider', '$stateProvider', '$urlRouterProvider', '$ionicCo
                 templateUrl: 'view/GoodsReceipt/tjms5.html',
                 controller: 'Grtjms5Ctrl'
             } )
+            .state( 'grUpdateTjms5', {
+                url: '/gr/updatetjms5/:TrxNo/:LineItemNo',
+                cache: 'false',
+                templateUrl: 'view/GoodsReceipt/updatetjms5.html',
+                controller: 'grUpdateTjms5Ctrl'
+            } )
             .state('jobListingConfirm', {
               url: '/gr/confirm/:TrxNo',
               cache: 'false',
