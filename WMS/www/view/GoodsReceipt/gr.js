@@ -520,6 +520,7 @@ app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiSe
                 ChgWtRoundUp: 0,
                 ContainerNo: '',
                 EquipmentTypeDescription: '',
+                disableVehicleType:false,
                 VehicleNo: '',
                 Volume: 0
             },
@@ -544,10 +545,21 @@ app.controller('Grtjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiSe
                         $scope.Detail.tjms5.EquipmentTypeDescription = $scope.Detail.tote1[0].EquipmentTypeDescription;
                         $scope.Detail.tjms5.Volume = $scope.Detail.tote1[0].Volume;
                         $scope.Detail.tjms5.ChargeWeight = $scope.Detail.tote1[0].ChgWt;
+                        // if ($scope.Detail.tote1[0].EditFlag === 'Y') {
+                        //     $scope.Detail.tjms5.disabled = false;
+                        // } else {
+                        //     $scope.Detail.tjms5.disabled = true;
+                        // }
+
                         if ($scope.Detail.tote1[0].EditFlag === 'Y') {
                             $scope.Detail.tjms5.disabled = false;
-                        } else {
+                                $scope.Detail.tjms5.disableVehicleType=true;
+                        }else if($scope.Detail.tote1[0].EditFlag === 'A'){
+                            $scope.Detail.tjms5.disabled = false;
+                              $scope.Detail.tjms5.disableVehicleType=false;
+                        }else {
                             $scope.Detail.tjms5.disabled = true;
+                            $scope.Detail.tjms5.disableVehicleType=true;
                         }
                     }
 
@@ -610,6 +622,7 @@ app.controller('grUpdateTjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 
                 ContainerNo: '',
                 EquipmentTypeDescription: '',
                 VehicleNo: '',
+                disableVehicleType:false,
                 Volume: 0
             },
             tote1: {},
@@ -633,6 +646,7 @@ app.controller('grUpdateTjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 
                     if (results.length > 0) {
                         // $scope.Detail.tjms5 = results;
                         var jobs = getjobs(results[0]);
+                        $scope.showDetailTote1( results[0].EquipmentType,$scope.Detail.tjms5.LineItemNo);
                         $scope.refreshEquipmentType(results[0].EquipmentType);
                         dataResults = dataResults.concat(jobs);
                         $scope.Detail.tjms5 = dataResults[0];
@@ -643,11 +657,38 @@ app.controller('grUpdateTjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 
             }
         };
 
+        $scope.showDetailTote1 = function (EquipmentType, LineItemNo) {
+            if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
+                var objUri = ApiService.Uri(true, '/api/tms/Tovt1');
+                objUri.addSearch('EquipmentType',EquipmentType);
+                ApiService.Get(objUri, false).then(function success(result) {
+                    $scope.Detail.tote1 = result.data.results;
+                    if ($scope.Detail.tote1.length > 0) {
+                        // $scope.Detail.tjms5.EquipmentType = $scope.Detail.tote1[0].EquipmentType;
+                        // $scope.Detail.tjms5.EquipmentTypeDescription = $scope.Detail.tote1[0].EquipmentTypeDescription;
+                        // $scope.Detail.tjms5.Volume = $scope.Detail.tote1[0].Volume;
+                        // $scope.Detail.tjms5.ChargeWeight = $scope.Detail.tote1[0].ChgWt;
+                        if ($scope.Detail.tote1[0].EditFlag === 'Y') {
+                            $scope.Detail.tjms5.disabled = false;
+                                $scope.Detail.tjms5.disableVehicleType=true;
+                        }else if($scope.Detail.tote1[0].EditFlag === 'A'){
+                            $scope.Detail.tjms5.disabled = false;
+                              $scope.Detail.tjms5.disableVehicleType=false;
+                        }else {
+                            $scope.Detail.tjms5.disabled = true;
+                            $scope.Detail.tjms5.disableVehicleType=true;
+                        }
+                    }
+
+                });
+            }
+        };
+
         $scope.showTote1 = function (EquipmentType, LineItemNo) {
             if (is.not.undefined(EquipmentType) && is.not.empty(EquipmentType)) {
                 var objUri = ApiService.Uri(true, '/api/tms/Tovt1');
-                objUri.addSearch('EquipmentType', EquipmentType.EquipmentType);
-                ApiService.Get(objUri, false).then(function success(result) {
+                   objUri.addSearch('EquipmentType', EquipmentType.EquipmentType);
+                  ApiService.Get(objUri, false).then(function success(result) {
                     $scope.Detail.tote1 = result.data.results;
                     if ($scope.Detail.tote1.length > 0) {
                         $scope.Detail.tjms5.EquipmentType = $scope.Detail.tote1[0].EquipmentType;
@@ -656,8 +697,13 @@ app.controller('grUpdateTjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 
                         $scope.Detail.tjms5.ChargeWeight = $scope.Detail.tote1[0].ChgWt;
                         if ($scope.Detail.tote1[0].EditFlag === 'Y') {
                             $scope.Detail.tjms5.disabled = false;
-                        } else {
+                                $scope.Detail.tjms5.disableVehicleType=true;
+                        }else if($scope.Detail.tote1[0].EditFlag === 'A'){
+                            $scope.Detail.tjms5.disabled = false;
+                              $scope.Detail.tjms5.disableVehicleType=false;
+                        }else {
                             $scope.Detail.tjms5.disabled = true;
+                            $scope.Detail.tjms5.disableVehicleType=true;
                         }
                     }
 
@@ -701,7 +747,7 @@ app.controller('grUpdateTjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 
                 objUri.addSearch('EquipmentType', $scope.Detail.tjms5.EquipmentType);
                 objUri.addSearch('EquipmentTypeDescription', $scope.Detail.tjms5.EquipmentTypeDescription);
                 objUri.addSearch('ContainerNo', $scope.Detail.tjms5.ContainerNo);
-                  objUri.addSearch('CargoDescription', $scope.Detail.tjms5.CargoDescription);
+                objUri.addSearch('CargoDescription', $scope.Detail.tjms5.CargoDescription);
                 objUri.addSearch('Volume', $scope.Detail.tjms5.Volume);
                 objUri.addSearch('ChargeWeight', $scope.Detail.tjms5.ChargeWeight);
                 objUri.addSearch('ChgWtRoundUp', $scope.Detail.tjms5.ChgWtRoundUp);

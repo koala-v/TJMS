@@ -241,7 +241,7 @@ namespace WebApi.ServiceModel.TMS
                     {
                         if (!string.IsNullOrEmpty(request.EquipmentType))
                         {
-                            string strSQL = "Select ISNULL(VehicleType,'') as EquipmentType, ISNULL(VehicleTypeDescription,'') as EquipmentTypeDescription,Volume,ChgWt,ISNULL(EditFlag,'') as EditFlag From Tovt1 Where VehicleType = '" + request.EquipmentType + "'";
+                            string strSQL = "Select ISNULL(VehicleType,'') as EquipmentType, ISNULL(VehicleTypeDescription,'') as EquipmentTypeDescription,Volume,ChgWt,ISNULL(EditFlag,'N') as EditFlag From Tovt1 Where VehicleType = '" + request.EquipmentType + "'";
                             Result = db.Select<Tovt1>(strSQL);
                         }
 
