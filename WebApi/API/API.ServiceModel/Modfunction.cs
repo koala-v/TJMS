@@ -42,5 +42,21 @@ namespace WebApi.ServiceModel
             }
         }
 
+        public static double ReturnDobule(double strValue)
+        {
+            return strValue;
+
+
+            //if (strValue == "")
+            //{
+            //    { return 0; }
+            //}
+            //else
+            //{
+               
+            //}
+        }
+
+
     }
 }

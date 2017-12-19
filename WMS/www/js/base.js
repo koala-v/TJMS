@@ -29,6 +29,21 @@ var checkDateTimeisEmpty = function (datetime) {
   }
     return datetime;
 };
+
+var retrurnChgWtRoundUp = function (ChargeWeight){
+  ChargeWeight=ChargeWeight.toString();
+   if(ChargeWeight.split('.').length ===2 ) {
+     if(ChargeWeight.split('.')[1]>0){
+     return Number(ChargeWeight.split('.')[0])+1;
+   }
+   else{
+      return Number(ChargeWeight);
+   }
+ }else
+ {
+    return Number(ChargeWeight);
+ }
+};
 var checkDateCompleted = function (datetime) {
     if (is.equal(moment(datetime).format('DD-MMM-YYYY'), '01-Jan-0001')) {
         datetime = '';

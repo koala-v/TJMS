@@ -53,9 +53,9 @@ namespace WebApi.ServiceModel.TMS
         public string EquipmentTypeDescription { get; set; }
         public string ContainerNo { get; set; }
         public string CargoDescription { get; set; }
-        public int Volume { get; set; }
-        public int ChargeWeight { get; set; }
-        public int ChgWtRoundUp { get; set; }
+        public double Volume { get; set; }
+        public double ChargeWeight { get; set; }
+        public double ChgWtRoundUp { get; set; }
         public string VehicleNo { get; set; }
 
 
@@ -215,7 +215,7 @@ namespace WebApi.ServiceModel.TMS
 
                             //string strSQL = "select DISTINCT CustomerCode as BusinessPartyCode ,CustomerName as  BusinessPartyName  from tjms1 where IsNUll(StatusCode,'')<>'DEL' And CustomerCode LIKE '" + request.BusinessPartyName + "%' Order By tjms1.CustomerCode Asc";
 
-                            string strSQL = "Select VehicleType as  EquipmentType From Tovt1 Where VehicleType LIKE '" + request.EquipmentType + "%'";
+                            string strSQL = "Select VehicleTypeDescription as  EquipmentType From Tovt1 Where VehicleTypeDescription LIKE '" + request.EquipmentType + "%'";
                             Result = db.Select<Tovt1>(strSQL);
                         }
 
@@ -241,7 +241,7 @@ namespace WebApi.ServiceModel.TMS
                     {
                         if (!string.IsNullOrEmpty(request.EquipmentType))
                         {
-                            string strSQL = "Select ISNULL(VehicleType,'') as EquipmentType, ISNULL(VehicleTypeDescription,'') as EquipmentTypeDescription,Volume,ChgWt,ISNULL(EditFlag,'N') as EditFlag From Tovt1 Where VehicleType = '" + request.EquipmentType + "'";
+                            string strSQL = "Select ISNULL(VehicleType,'') as EquipmentType, ISNULL(VehicleTypeDescription,'') as EquipmentTypeDescription,Volume,ChgWt,ISNULL(EditFlag,'N') as EditFlag From Tovt1 Where VehicleTypeDescription = '" + request.EquipmentType + "'";
                             Result = db.Select<Tovt1>(strSQL);
                         }
 
@@ -281,9 +281,9 @@ namespace WebApi.ServiceModel.TMS
                                 string EquipmentTypeDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.EquipmentTypeDescription));
                                 string ContainerNo =Modfunction.SQLSafeValue( Modfunction.CheckNull(request.ContainerNo));
                                 string CargoDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.CargoDescription));
-                                int Volume = Modfunction.ReturnZero(request.Volume.ToString());
-                                int ChargeWeight = Modfunction.ReturnZero(request.ChargeWeight.ToString());
-                                int ChgWtRoundUp = Modfunction.ReturnZero(Modfunction.CheckNull(request.ChgWtRoundUp));                  
+                                double Volume = Modfunction.ReturnDobule(request.Volume);
+                                double ChargeWeight = Modfunction.ReturnDobule(request.ChargeWeight);
+                                double ChgWtRoundUp = Modfunction.ReturnDobule(request.ChgWtRoundUp);                  
                                 string VehicleNo = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.VehicleNo));
                                 string startDateTime = "(select  Top 1 ISNULL(StartDateTime,NULL) AS StartDateTime  from tjms4 where TrxNo=" + TrxNo + ")  ";
                                 string endDateTime = "(select  Top 1  ISNULL(EndDateTime,NULL) AS EndDateTime  from tjms4 where TrxNo=" + TrxNo + ")";
@@ -369,9 +369,9 @@ namespace WebApi.ServiceModel.TMS
                         string EquipmentTypeDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.EquipmentTypeDescription));
                         string ContainerNo = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.ContainerNo));
                         string CargoDescription = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.CargoDescription));
-                        int Volume = Modfunction.ReturnZero(request.Volume.ToString());
-                        int ChargeWeight = Modfunction.ReturnZero(request.ChargeWeight.ToString());
-                        int ChgWtRoundUp = Modfunction.ReturnZero(Modfunction.CheckNull(request.ChgWtRoundUp));
+                        double Volume = Modfunction.ReturnDobule(request.Volume);
+                        double ChargeWeight = Modfunction.ReturnDobule(request.ChargeWeight);
+                        double ChgWtRoundUp = Modfunction.ReturnDobule(request.ChgWtRoundUp);
                         string VehicleNo = Modfunction.SQLSafeValue(Modfunction.CheckNull(request.VehicleNo));
                         int LineItemNo = Modfunction.ReturnZero(request.LineItemNo.ToString());
 
