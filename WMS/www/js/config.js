@@ -29,7 +29,7 @@ appConfig.constant('ENV', {
     updateFile:   'update.json',
     rootPath:     'TJMSPath',
     configFile:   'config.txt',
-    version:      '1.0.1.9',
+    version:      '1.0.1.10',
     parameter: {
         showSerialNo : false
     },
