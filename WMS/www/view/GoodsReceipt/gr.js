@@ -213,6 +213,7 @@ appControllers.controller('GrDetailCtrl', [
                     objUri.addSearch('LineItemNo', $scope.Detail.tjms5[i].LineItemNo);
                     objUri.addSearch('EquipmentType', $scope.Detail.tjms5[i].EquipmentType);
                     objUri.addSearch('EquipmentTypeDescription', $scope.Detail.tjms5[i].EquipmentTypeDescription);
+                    objUri.addSearch('CargoDescription', $scope.Detail.tjms5[i].CargoDescription);
                     objUri.addSearch('ContainerNo', $scope.Detail.tjms5[i].ContainerNo);
                     objUri.addSearch('Volume', $scope.Detail.tjms5[i].Volume);
                     objUri.addSearch('ChargeWeight', $scope.Detail.tjms5[i].ChargeWeight);
