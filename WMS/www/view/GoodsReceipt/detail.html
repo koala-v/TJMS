@@ -4,8 +4,8 @@
 		<div class="h1 title">Tjms Detail {{Detail.Tjms2.JobNo}} </div>
 		<!-- <button class="button button-icon icon ion-android-print" ng-click="gotoPrint('1')"></button> -->
 	</ion-header-bar>
-	<ion-content overflow-scroll="true">
-		<div class="card">
+	<ion-content overflow-scroll="true" >
+		<div class="card" >
 			<div class="item" style="padding: 0px">
 				<div class="row">
 					<div class="col ">
@@ -31,7 +31,7 @@
 				<p style="font-weight:bold;">Customer&nbsp;Rep &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; :</p>
 				<!-- <p><span ng-bind="Detail.Tjms2.OfficeInChargeName"></span></p> -->
 				<label class="item item-input">
-					<textarea wrap="hard" cols="48px" ng-model="Detail.Tjms2.OfficeInChargeName" rows="4">
+					<textarea wrap="hard" data-ng-disabled="Detail.disabled"  cols="48px" ng-model="Detail.Tjms2.OfficeInChargeName" rows="4">
 					</textarea>
 				</label>
 			</div>
@@ -45,7 +45,7 @@
 				<div class="col" style="padding:0px;">
 					<label class="item item-input">
 						<span class="input-label" style="padding-top:2px; padding-bottom: 2px;font-weight:bold;">Date : </span>
-						<button class="button button-light" id="id_DateCompleted" ng-click="OnDatePicker()">
+						<button data-ng-disabled="Detail.disabled"  class="button button-light" id="id_DateCompleted" ng-click="OnDatePicker()">
 							<i class="icon ion-calendar"></i>&nbsp;&nbsp;
 							<span ng-bind="Detail.Tjms2.DateCompleted"></span>&nbsp;
 							<i class="icon ion-android-arrow-dropdown"></i>
@@ -56,7 +56,7 @@
 			<!-- </div> -->
 			<!-- Container List==================== start -->
 			<div class="button-bar">
-				<button class="button icon ion-plus-round button-positive" ng-click="gotoTjms5()">
+				<button   data-ng-disabled="Detail.disabled" class="button icon ion-plus-round button-positive" ng-click="gotoTjms5()">
 					Add Tjms5
 				</button>
 			</div>
@@ -75,7 +75,7 @@
 							<!-- <th>Start Time&nbsp;</th>
 							<th> End Time &nbsp;</th> -->
 						</tr>
-						<tr ng-repeat="tjms5 in Detail.tjms5"  >
+						<tr ng-repeat="tjms5 in Detail.tjms5"    >
 							<!-- <td>
 								<ui-select theme="bootstrap" ng-model="EquipmentType.selected" reset-search-input="true" on-select="showTote1(EquipmentType.selected,tjms5.LineItemNo)">
 									<ui-select-match allow-clear="true" placeholder="Enter to search..." style="overflow:hidden;">{{$select.selected.EquipmentType}}</ui-select-match>
@@ -86,7 +86,7 @@
 
 							</td> -->
 
-							<td ng-click="gotoUpdateTjms5(tjms5.LineItemNo)">
+							<td ng-click="gotoUpdateTjms5(tjms5.LineItemNo)" >
 								<label class="item item-input"  >
 									<input type="text" disabled="true"  id="" ng-model="tjms5.EquipmentTypeDescription" style="">
 								</label>
@@ -142,7 +142,7 @@
 
 							<td>
 								<label class="item item-input">
-									<button class="button button-clear button-positive button-small" ng-click="DeleteLine(tjms5.LineItemNo)"><i class="icon ion-android-close"></i></button>
+									<button data-ng-disabled="Detail.disabled" class="button button-clear button-positive button-small" ng-click="DeleteLine(tjms5.LineItemNo)"><i class="icon ion-android-close"></i></button>
 								</label>
 							</td>
 						</tr>
@@ -244,7 +244,7 @@
 				<!-- <p><span ng-bind="Detail.Tjms2.ChargeBerthQty"></span></p> -->
 				<label class="item item-input" style="width:300px">
 					<span style="font-weight:bold;">Berthing/UnBerthing:&nbsp;&nbsp;</span>
-					<input type="number" id="" ng-model="Detail.Tjms2.ChargeBerthQty" style="padding-right:1em;padding-top: 0px; ">
+					<input type="number"  data-ng-disabled="Detail.disabled" id="" ng-model="Detail.Tjms2.ChargeBerthQty" style="padding-right:1em;padding-top: 0px; ">
 				</label>
 			</div>
 			<div class="item" style="padding: 0px">
@@ -252,14 +252,14 @@
 				<label class="item item-input" style="width:300px">
 					<span style="font-weight:bold;">Lifting Supervisor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</span>
 					<!-- <p><span ng-bind="Detail.Tjms2.ChargeLiftingQty"></span></p> -->
-					<input type="number" id="" ng-model="Detail.Tjms2.ChargeLiftingQty" style="padding-right:1em;padding-top: 0px;">
+					<input type="number" data-ng-disabled="Detail.disabled"  id="" ng-model="Detail.Tjms2.ChargeLiftingQty" style="padding-right:1em;padding-top: 0px;">
 				</label>
 			</div>
 			<div class="item" style="padding: 0px;width:300px">
 				<!-- <p style="font-weight:bold;">Signal Man&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p> -->
 				<label class="item item-input">
 					<span style="font-weight:bold;">Signal Man&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</span>
-					<input type="number" id="" ng-model="Detail.Tjms2.SignalManQty" style="padding-right:1em;padding-top: 0px;">
+					<input type="number" data-ng-disabled="Detail.disabled"  id="" ng-model="Detail.Tjms2.SignalManQty" style="padding-right:1em;padding-top: 0px;">
 				</label>
 			</div>
 			<div class="item" style="padding: 0px">
@@ -267,7 +267,7 @@
 				<span style="font-weight:bold;">&nbsp;&nbsp;&nbsp;&nbsp;Others &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
 				<label class="item item-input">
 
-					<textarea wrap="hard" cols="48px" ng-model="Detail.Tjms2.ChargeOther" rows="4">
+					<textarea wrap="hard" cols="48px"  data-ng-disabled="Detail.disabled" ng-model="Detail.Tjms2.ChargeOther" rows="4">
 					</textarea>
 				</label>
 			</div>

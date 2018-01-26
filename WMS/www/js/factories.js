@@ -40,6 +40,7 @@ appFactory.factory('TABLE_DB', function () {
             TempBase64:'TEXT',
             CustomerSignOffDateTime: 'TEXT',
             SignalManQty:'INT',
+            StatusCode: 'TEXT',
         },
     };
     return TABLE_DB;

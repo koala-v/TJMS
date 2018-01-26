@@ -7,7 +7,7 @@
         <div class="buttons">
         </div>
     </ion-header-bar>
-<ion-pane style="margin-top:44px;">
+    <ion-pane style="margin-top:44px;" data-ng-disabled="Detail.disabled"  >
         <div class="row">
             <span class="input-label" style="padding-top:2px; padding-bottom: 2px;"> &nbsp; &nbsp;&nbsp;Code &nbsp;&nbsp;</span>
             <div class="col" style="padding:0px;">
@@ -24,7 +24,7 @@
             <div class="col" style="padding:0px;">
                 <label class="item item-input">
                     <span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Vehicle Type &nbsp;&nbsp;</span>
-                    <input type="text" id=""  data-ng-disabled="Detail.tjms5.disableVehicleType" ng-model="Detail.tjms5.EquipmentTypeDescription" placeholder="Vehicle Type" style="padding-right: 14px;">
+                    <input type="text" id=""    data-ng-disabled="Detail.tjms5.disableVehicleType" ng-model="Detail.tjms5.EquipmentTypeDescription" placeholder="Vehicle Type" style="padding-right: 14px;">
                 </label>
             </div>
         </div>
@@ -65,7 +65,7 @@
             <div class="col" style="padding:0px;">
                 <label class="item item-input">
                     <span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Chg Wt(Rnd Up) &nbsp;&nbsp;</span>
-                    <input type="number" id="" ng-model="Detail.tjms5.ChgWtRoundUp"  data-ng-disabled="true" placeholder="Chg Wt(Rnd Up) " style="padding-right: 14px;">
+                    <input type="number" id="" ng-model="Detail.tjms5.ChgWtRoundUp" data-ng-disabled="true" placeholder="Chg Wt(Rnd Up) " style="padding-right: 14px;">
                 </label>
             </div>
         </div>
@@ -79,11 +79,11 @@
             </div>
         </div>
 
-  </ion-pane>
+    </ion-pane>
 
     <ion-footer-bar class="bar-positive">
         <div class="button-bar">
-            <button class="button icon ion-android-done" ng-click="updateTjms5()">
+            <button  data-ng-disabled="Detail.disabled" class="button icon ion-android-done" ng-click="updateTjms5()">
                 Update
             </button>
             <button class="button icon ion-arrow-return-right" ng-click="returnDetail()">

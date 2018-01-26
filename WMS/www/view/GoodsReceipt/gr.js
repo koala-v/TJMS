@@ -104,6 +104,7 @@ appControllers.controller('GrDetailCtrl', [
         var hmImsn1 = new HashMap();
         $scope.Detail = {
             TrxNo: $stateParams.TrxNo,
+            disabled: false,
             Tjms2: {
                 CargoDescription: '',
                 Vessel: '',
@@ -118,6 +119,7 @@ appControllers.controller('GrDetailCtrl', [
             // if ($ionicHistory.backView()) {
             //     $ionicHistory.goBack();
             // } else {
+            $scope.updateFile();
             $state.go('grList', {}, {
                 reload: false
             });
@@ -125,6 +127,7 @@ appControllers.controller('GrDetailCtrl', [
         };
 
         $scope.gotoUpdateTjms5 = function (LineItemNo) {
+            $scope.updateFile();
             $state.go('grUpdateTjms5', {
                 'TrxNo': $scope.Detail.TrxNo,
                 'LineItemNo': LineItemNo,
@@ -134,6 +137,7 @@ appControllers.controller('GrDetailCtrl', [
             // }
         };
         $scope.gotoTjms5 = function () {
+            $scope.updateFile();
             $state.go('grTjms5', {
                 'TrxNo': $scope.Detail.TrxNo,
             }, {
@@ -233,9 +237,24 @@ appControllers.controller('GrDetailCtrl', [
 
             }
         };
+
+        $scope.updateFile = function () {
+            var objUriUpdate = ApiService.Uri(true, '/api/tms/tjms2/update');
+            objUriUpdate.addSearch('TrxNo', $scope.Detail.Tjms2.TrxNo);
+            objUriUpdate.addSearch('LineItemNo', $scope.Detail.Tjms2.LineItemNo);
+            objUriUpdate.addSearch('strDateCompleted', $scope.Detail.Tjms2.DateCompleted);
+            objUriUpdate.addSearch('ChargeBerthQty', $scope.Detail.Tjms2.ChargeBerthQty);
+            objUriUpdate.addSearch('ChargeLiftingQty', $scope.Detail.Tjms2.ChargeLiftingQty);
+            objUriUpdate.addSearch('ChargeOther', $scope.Detail.Tjms2.ChargeOther);
+            objUriUpdate.addSearch('OfficeInChargeName', $scope.Detail.Tjms2.OfficeInChargeName);
+            objUriUpdate.addSearch('SignalManQty', $scope.Detail.Tjms2.SignalManQty);
+            ApiService.Get(objUriUpdate, false).then(function success(result) {});
+        };
+
         $scope.gotoConfirm = function () {
             UpdateTjms2();
             updateTjms5();
+            $scope.updateFile();
             $state.go('jobListingConfirm', {
                 'TrxNo': $scope.Detail.TrxNo,
 
@@ -244,7 +263,6 @@ appControllers.controller('GrDetailCtrl', [
             });
         };
         $scope.gotoPrint = function () {
-
             $state.go('grPrint', {
                 'TrxNo': $scope.Detail.TrxNo,
                 'Flag': 'N',
@@ -322,6 +340,12 @@ appControllers.controller('GrDetailCtrl', [
                         $scope.Detail.Tjms2.StartDateTime = checkDateTimeisEmpty($scope.Detail.Tjms2.StartDateTime);
                         $scope.Detail.Tjms2.EndDateTime = checkDateTimeisEmpty($scope.Detail.Tjms2.EndDateTime);
                         $scope.Detail.Tjms2.DateCompleted = checkDateCompleted($scope.Detail.Tjms2.DateCompleted);
+                        if ($scope.Detail.Tjms2.StatusCode.toUpperCase() === 'TRF') {
+                            $scope.Detail.disabled = true;
+                        } else {
+                            $scope.Detail.disabled = false;
+                        }
+
                         getSignature(objImgr2);
                         getTjms5(TrxNo);
                     }
@@ -336,15 +360,21 @@ appControllers.controller('GrDetailCtrl', [
 app.controller('JoblistingConfirmCtrl', ['ENV', '$scope', '$state', '$stateParams', 'ApiService', '$ionicPopup', '$ionicPlatform', '$cordovaSQLite', '$cordovaNetwork', '$ionicLoading', 'SqlService', 'PopupService',
     function (ENV, $scope, $state, $stateParams, ApiService, $ionicPopup, $ionicPlatform, $cordovaSQLite, $cordovaNetwork, $ionicLoading, SqlService, PopupService) {
         var canvas = document.getElementById('signatureCanvas'),
-            signaturePad = new SignaturePad(canvas),
-            strEemptyBase64 = '';
+
+        signaturePad = new SignaturePad(canvas),
+        cxt = canvas.getContext("2d");
+        cxt.fillStyle = "#ffffff";
+        cxt.fillRect(0, 0, canvas.width, canvas.height);
+        strEemptyBase64 = '';
         $scope.signature = null;
         $scope.Error = {
             Err1: '',
             Err2: '',
             Err3: ''
         };
+
         $scope.Confirm = {
+          disabled: false,
             Tjms2: {
                 TrxNo: $stateParams.TrxNo,
             }
@@ -354,6 +384,13 @@ app.controller('JoblistingConfirmCtrl', ['ENV', '$scope', '$state', '$stateParam
             SqlService.Select('Tjms2', '*', strSqlFilter).then(function (results) {
                 if (results.rows.length > 0) {
                     $scope.Confirm.Tjms2 = results.rows.item(0);
+                    if ($scope.Confirm.Tjms2.StatusCode.toUpperCase()==='TRF')
+                    {
+                          $scope.Confirm.disabled=true;
+                    }else {
+                          $scope.Confirm.disabled=false;
+                    }
+
                     if ($scope.Confirm.Tjms2.TempBase64 !== null && is.not.empty($scope.Confirm.Tjms2.TempBase64)) {
                         if (is.not.equal(strEemptyBase64, $scope.Confirm.Tjms2.TempBase64)) {
                             $scope.signature = 'data:image/png;base64,' + $scope.Confirm.Tjms2.TempBase64;
@@ -367,6 +404,9 @@ app.controller('JoblistingConfirmCtrl', ['ENV', '$scope', '$state', '$stateParam
             var ratio = window.devicePixelRatio || 1;
             canvas.width = window.innerWidth - 50;
             canvas.height = screen.height / 3;
+            cxt = canvas.getContext("2d");
+            cxt.fillStyle = "#ffffff";
+            cxt.fillRect(0, 0, canvas.width, canvas.height);
         }
         $scope.returnList = function () {
             $state.go('grList', {}, {});
@@ -381,6 +421,9 @@ app.controller('JoblistingConfirmCtrl', ['ENV', '$scope', '$state', '$stateParam
         $scope.clearCanvas = function () {
             $scope.signature = null;
             signaturePad.clear();
+            cxt = canvas.getContext("2d");
+            cxt.fillStyle = "#ffffff";
+            cxt.fillRect(0, 0, canvas.width, canvas.height);
         };
         $scope.saveCanvas = function () {
             var sigImg = signaturePad.toDataURL();
@@ -618,6 +661,7 @@ app.controller('grUpdateTjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 
     function (ENV, $scope, $state, $stateParams, ApiService, $ionicPopup, $ionicPlatform, $cordovaSQLite, $cordovaNetwork, $ionicLoading, SqlService, PopupService) {
 
         $scope.Detail = {
+              disabled: false,
             tjms5: {
                 TrxNo: $stateParams.TrxNo,
                 LineItemNo: $stateParams.LineItemNo,
@@ -660,6 +704,13 @@ app.controller('grUpdateTjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 
                         $scope.refreshEquipmentType(results[0].EquipmentType);
                         dataResults = dataResults.concat(jobs);
                         $scope.Detail.tjms5 = dataResults[0];
+                        if(  $scope.Detail.tjms5.StatusCode.toUpperCase() === 'TRF')
+                             {
+                             $scope.Detail.disabled = true;
+                             }  else  {
+                              $scope.Detail.disabled = false;
+                          }
+
                     } else {
                         $scope.Detail.tjms5 = dataResults;
                     }
@@ -744,6 +795,7 @@ app.controller('grUpdateTjms5Ctrl', ['ENV', '$scope', '$state', '$stateParams', 
                 ChargeWeight: obj.ChargeWeight,
                 ChgWtRoundUp: obj.ChgWtRoundUp,
                 VehicleNo: obj.VehicleNo,
+                StatusCode:obj.StatusCode
 
             };
             return jobs;

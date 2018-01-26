@@ -109,6 +109,7 @@ namespace WebApi.ServiceModel.TMS
                                 " isnull((select tjms1.SignedByName from tjms1 where trxno = tjms2.TrxNo),'') as SignedByName," +
                                 " isnull((select tjms1.SignedByNric from tjms1 where trxno = tjms2.TrxNo),'') as SignedByNric," +
                                 " isnull((select tjms1.SignedByDesignation from tjms1 where trxno = tjms2.TrxNo),'') as SignedByDesignation," +
+                                " isnull((select tjms1.StatusCode from tjms1 where trxno = tjms2.TrxNo),'') as StatusCode," +
                                 " (select tjms1.CustomerSignOffDateTime from tjms1 where trxno = tjms2.TrxNo) as CustomerSignOffDateTime, " +
                                 " isnull((select CompanyName from saco1),'') as CompanyName" +
                                 "  from tjms2  where trxno = " + request.TrxNo + " ";      
@@ -168,6 +169,7 @@ namespace WebApi.ServiceModel.TMS
                             "  select ISNULL( EquipmentType,'') as EquipmentType , " +
                             "  LineItemNo ," +
                              " TrxNo , " +
+                            " isnull((select tjms1.StatusCode from tjms1 where tjms1.trxno = tjms5.TrxNo),'') as StatusCode," +
                             " ISNULL( EquipmentTypeDescription,'') as EquipmentTypeDescription," +
                             " ISNULL(ContainerNo,'') as ContainerNo ," +
                             "  ISNULL(CargoDescription ,'') as CargoDescription," +

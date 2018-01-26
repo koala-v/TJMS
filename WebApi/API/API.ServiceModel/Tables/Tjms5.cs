@@ -20,5 +20,9 @@ namespace WebApi.ServiceModel.Tables
          public string disabled { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
+        public string StatusCode { get; set; }
+
+
+        
     }
 }

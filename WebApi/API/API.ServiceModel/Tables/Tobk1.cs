@@ -43,7 +43,9 @@ namespace WebApi.ServiceModel.Tables
         public string CompanyName { get; set; }
         public DateTime CustomerSignOffDateTime { get; set; }
         public   int SignalManQty { get; set; }
+        public string StatusCode { get; set; }
+ 
 
 
-}
+    }
 }

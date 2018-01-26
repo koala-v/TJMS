@@ -12,44 +12,45 @@
             <div class="item" style="padding: 10px">
                 <p>Please sign below to confirm that the</p>
             </div>
-            <div class="item item-body">
-                <div style="height: 0.5px"></div>
-                <div>
-                    <canvas id='signatureCanvas' width="323px" height="140px" style="border: 1px solid black;" ng-show="signature==null"></canvas>
-                    <img ng-src='{{signature}}' ng-show="signature!=null" />
-                    <a class="button  icon-left iconfont ion-android-refresh button-clear button-positive" ng-click="clearCanvas()">Clear</a>
+            <div class="item item-body" Readonly="true">
+                <div style="height: 0.5px" ></div>
+                <div   >
+                    <canvas   id='signatureCanvas' width="323px" height="140px" style="border: 1px solid black;" ng-show="signature==null"></canvas>
+                    <img   ng-src='{{signature}}' ng-show="signature!=null"   />
+
+                    <a class="button    icon-left iconfont ion-android-refresh button-clear button-positive" ng-click="clearCanvas()">Clear</a>
                 </div>
             </div>
             <hr style="margin: 1px;" />
             <div class="" style="padding:0px;">
                 <label class="item item-input">
                     <span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
-                    <input type="text" id="txt-SignedByName" ng-model="Confirm.Tjms2.SignedByName" ng-keypress="enter($event, 'SignedByName') ">
+                    <input type="text" data-ng-disabled="Confirm.disabled" id="txt-SignedByName" ng-model="Confirm.Tjms2.SignedByName" ng-keypress="enter($event, 'SignedByName') ">
                 </label>
             </div>
             <div class="" style="padding:0px;">
                 <label class="item item-input">
                     <span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Nric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
-                    <input type="text" id="txt-SignedByNric" ng-model="Confirm.Tjms2.SignedByNric" ng-keypress="enter($event, 'SignedByNric') ">
+                    <input type="text" data-ng-disabled="Confirm.disabled"  id="txt-SignedByNric" ng-model="Confirm.Tjms2.SignedByNric" ng-keypress="enter($event, 'SignedByNric') ">
                 </label>
             </div>
             <div class="" style="padding:0px;">
                 <label class="item item-input">
                     <span class="input-label" style="padding-top:2px; padding-bottom: 2px;">Designation&nbsp;&nbsp;:</span>
-                    <input type="text" id="txt-SignedByDesignation" ng-model="Confirm.Tjms2.SignedByDesignation" ng-keypress="enter($event, 'SignedByDesignation') ">
+                    <input type="text" data-ng-disabled="Confirm.disabled"  id="txt-SignedByDesignation" ng-model="Confirm.Tjms2.SignedByDesignation" ng-keypress="enter($event, 'SignedByDesignation') ">
                 </label>
             </div>
             <div class="" style="padding:0px;">
                 <label class="item item-input">
                     <span class="input-label" style="padding-top:2px; padding-bottom: 2px;">On behalf of&nbsp;&nbsp;:</span>
-                    <input type="text" id="txt-CompanyName" ng-model="Confirm.Tjms2.CompanyName" ng-keypress="enter($event, 'CompanyName') ">
+                    <input type="text"  data-ng-disabled="Confirm.disabled" id="txt-CompanyName" ng-model="Confirm.Tjms2.CompanyName" ng-keypress="enter($event, 'CompanyName') ">
                 </label>
             </div>
         </div>
     </ion-content>
     <ion-footer-bar class="bar-positive ">
         <div class="button-bar">
-            <button class="button icon ion-android-done" ng-click="confirm()" ">
+            <button  data-ng-disabled="Confirm.disabled" class="button icon ion-android-done" ng-click="confirm()"  ">
                 &nbsp;OK
             </button>
             <button class="button icon ion-arrow-return-right " ng-click="returnDetail() ">
