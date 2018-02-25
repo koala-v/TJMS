@@ -248,6 +248,10 @@ appControllers.controller('GrDetailCtrl', [
             objUriUpdate.addSearch('ChargeOther', $scope.Detail.Tjms2.ChargeOther);
             objUriUpdate.addSearch('OfficeInChargeName', $scope.Detail.Tjms2.OfficeInChargeName);
             objUriUpdate.addSearch('SignalManQty', $scope.Detail.Tjms2.SignalManQty);
+            objUriUpdate.addSearch('SignedByName', $scope.Detail.Tjms2.SignedByName);
+            objUriUpdate.addSearch('SignedByNric', $scope.Detail.Tjms2.SignedByNric);
+            objUriUpdate.addSearch('SignedByDesignation', $scope.Detail.Tjms2.SignedByDesignation);
+            objUriUpdate.addSearch('CompanyName', $scope.Detail.Tjms2.CompanyName);
             ApiService.Get(objUriUpdate, false).then(function success(result) {});
         };
 

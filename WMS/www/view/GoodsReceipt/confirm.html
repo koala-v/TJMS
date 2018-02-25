@@ -18,7 +18,7 @@
                     <canvas   id='signatureCanvas' width="323px" height="140px" style="border: 1px solid black;" ng-show="signature==null"></canvas>
                     <img   ng-src='{{signature}}' ng-show="signature!=null"   />
 
-                    <a class="button    icon-left iconfont ion-android-refresh button-clear button-positive" ng-click="clearCanvas()">Clear</a>
+                    <a class="button     icon-left iconfont ion-android-refresh button-clear button-positive" ng-click="clearCanvas()"  data-ng-disabled="Confirm.disabled" >Clear</a>
                 </div>
             </div>
             <hr style="margin: 1px;" />
