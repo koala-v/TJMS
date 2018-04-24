@@ -99,7 +99,7 @@ namespace WebApi.ServiceModel.TMS
             string DocumentPath = "";
             try
             {
-                using (var db = DbConnectionFactory.OpenDbConnection())
+                using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
                     //string strSQL = "Select Top 1 BackupPath From Saco1";
                     string strSQL = "Select  DocumentPath From Saco1  ";

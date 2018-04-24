@@ -129,7 +129,7 @@ namespace WebApi.ServiceModel.TMS
 
             try
             {
-                using (var db = DbConnectionFactory.OpenDbConnection())
+                using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
                     if (request.TrxNo != null && request.TrxNo != "" && request.LineItemNo != null && request.LineItemNo != "")
                     {
@@ -264,7 +264,7 @@ namespace WebApi.ServiceModel.TMS
             int Result = -1;
             try
             {
-                using (var db = DbConnectionFactory.OpenDbConnection())
+                using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
                     //if (request.UpdateAllString != null && request.UpdateAllString != "")
                     //{
@@ -353,7 +353,7 @@ namespace WebApi.ServiceModel.TMS
             int Result = -1;
             try
             {
-                using (var db = DbConnectionFactory.OpenDbConnection())
+                using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
                     //if (request.UpdateAllString != null && request.UpdateAllString != "")
                     //{
@@ -422,7 +422,7 @@ namespace WebApi.ServiceModel.TMS
             int Result = -1;
             try
             {
-                using (var db = DbConnectionFactory.OpenDbConnection())
+                using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
                     //if (request.UpdateAllString != null && request.UpdateAllString != "")
                     //{

@@ -39,7 +39,7 @@ namespace WebApi.ServiceModel.TMS
             {
                 try
                 {
-                    using (var db = DbConnectionFactory.OpenDbConnection())
+                    using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                     {
                        string strSQL = "Select  DocumentPath From Saco1 ";
                         List<Saco1> saco1 = db.Select<Saco1>(strSQL);
@@ -94,7 +94,7 @@ namespace WebApi.ServiceModel.TMS
                     }
                     if (i.Equals(0))
                     {
-                        using (var db = DbConnectionFactory.OpenDbConnection())
+                        using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                         {
                            
                         }

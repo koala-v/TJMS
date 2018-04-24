@@ -57,21 +57,23 @@ namespace WebApi
                                                 };
 
             dbConnectionFactory.RegisterConnection("TMS", GetConnectionString("TMS"), SqlServerDialect.Provider);
-
-
+            dbConnectionFactory.RegisterConnection("WMS", GetConnectionString("WMS"), SqlServerDialect.Provider);
             container.Register<IDbConnectionFactory>(dbConnectionFactory);
 												//
             var secretKey = new WebApi.ServiceModel.SecretKeyFactory(strSecretKey);
             container.Register<WebApi.ServiceModel.ISecretKey>(secretKey);
             //Auth
             container.RegisterAutoWired<WebApi.ServiceModel.Auth>();
+            //WMS
+            container.RegisterAutoWired<WebApi.ServiceModel.TMS.tjms_logic>();
+          
             //TMS
             container.RegisterAutoWired<WebApi.ServiceModel.TMS.Tms_Login_Logic>();       
             container.RegisterAutoWired<WebApi.ServiceModel.TMS.UploadImg_Logic>();
             container.RegisterAutoWired<WebApi.ServiceModel.TMS.DownLoadImg_Logic>();
             container.RegisterAutoWired<WebApi.ServiceModel.TMS.Rcbp_Logic>();
             container.RegisterAutoWired<WebApi.ServiceModel.TMS.Tobk_Logic>();
-            container.RegisterAutoWired<WebApi.ServiceModel.TMS.tjms_logic>();
+            //container.RegisterAutoWired<WebApi.ServiceModel.TMS.tjms_logic>();
         }
         #region DES
         //private string DESKey = "F322186F";
@@ -150,7 +152,11 @@ namespace WebApi
 																{
 																				strAppSetting = System.Configuration.ConfigurationManager.AppSettings["TMS_DB"];
 																}
-															
+                                                            else if (string.Equals(type, "WMS"))
+                                                            {
+                                                                strAppSetting = System.Configuration.ConfigurationManager.AppSettings["WMS_DB"];
+                                                            }
+    
 																strSecretKey = System.Configuration.ConfigurationManager.AppSettings["SecretKey"];
                 strDataBase = strAppSetting.Split(',');
                 int intCnt;
