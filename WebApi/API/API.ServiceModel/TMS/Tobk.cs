@@ -470,7 +470,7 @@ namespace WebApi.ServiceModel.TMS
                                 if (request.LineItemNo  != "0")
                                 {
 
-                        str = "AttachmentFlag='Y' , CustomerSignOffDateTime=GetDate() ,  SignedByName = " + Modfunction.SQLSafeValue(request.SignedByName) + ",SignedByNric= " + Modfunction.SQLSafeValue(request.SignedByNric) + ",SignedByDesignation= " + Modfunction.SQLSafeValue(request.SignedByDesignation) + ",DateCompleted=" + Modfunction.SQLSafeValue(request.strDateCompleted) +  ",ChargeBerthQty="+ request.ChargeBerthQty + ",ChargeLiftingQty="+request.ChargeLiftingQty + ",SignalManQty=" + request.SignalManQty + ", ChargeOther=" + Modfunction.SQLSafeValue(request.ChargeOther) + "";
+                        str = "AttachmentFlag='Y' , CustomerSignOffDateTime=GetDate(), completiondate=GetDate(), DateCompleted=GetDate() ,  SignedByName = " + Modfunction.SQLSafeValue(request.SignedByName) + ",SignedByNric= " + Modfunction.SQLSafeValue(request.SignedByNric) + ",SignedByDesignation= " + Modfunction.SQLSafeValue(request.SignedByDesignation) + ",ChargeBerthQty="+ request.ChargeBerthQty + ",ChargeLiftingQty="+request.ChargeLiftingQty + ",SignalManQty=" + request.SignalManQty + ", ChargeOther=" + Modfunction.SQLSafeValue(request.ChargeOther) + "";
                                     db.Update("tjms1",
                                            str,
                                            " TrxNo='" + request.TrxNo + "' ");
