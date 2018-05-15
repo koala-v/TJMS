@@ -315,6 +315,7 @@ namespace WebApi.ServiceModel.TMS
                                         " Volume ," +
                                         " ChargeWeight ," +
                                         " ChgWtRoundUp ," +
+                                         " editflag ," +
                                         " VehicleNo  " +
                                      
                                         "  )" +
@@ -328,10 +329,16 @@ namespace WebApi.ServiceModel.TMS
                                         Volume + " , " +
                                         ChargeWeight + " , " +
                                         ChgWtRoundUp + " , " +
+                                        "(Select isnull(editFlag,'') From tovt1 where   VehicleTypeDescription ="+ EquipmentTypeDescription + ")," +
                                         VehicleNo + "  " +
                                       
                                             ") ";
                                     db.ExecuteSql(strSql);
+
+
+                            strSql = "  update tjms2 set ChargeWeight = (select sum(ChgWtRoundUp) from tjms5 where TrxNo=" + TrxNo + ")  Where LineItemNo =1 and TrxNo=" + TrxNo + " ";                      
+                            db.ExecuteSql(strSql);
+
 
                         }
                     }
@@ -400,11 +407,15 @@ namespace WebApi.ServiceModel.TMS
                                          "Volume=" + Volume + " ," +
                                          "ChargeWeight=" + ChargeWeight + " , " +
                                           "ChgWtRoundUp=" + ChgWtRoundUp + ",  " +
+                                          "EditFlag=(select EditFlag from tovt1 where VehicleTypeDescription=" + EquipmentTypeDescription + " )," +
                                          " VehicleNo=" + VehicleNo + " " +
                                           "Where LineItemNo =" + LineItemNo + " And TrxNo=" + TrxNo + "";
                                     db.ExecuteSql(strSql);
-                               
-                                }
+
+                            strSql = "  update tjms2 set ChargeWeight = (select sum(ChgWtRoundUp) from tjms5 where TrxNo=" + TrxNo + ")  Where LineItemNo =1 and TrxNo=" + TrxNo + " ";
+                            db.ExecuteSql(strSql);
+
+                        }
                     }
                     //    }
                     //}
